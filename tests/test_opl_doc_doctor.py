@@ -110,6 +110,21 @@ def test_negative_retirement_policy_is_not_legacy_pollution(tmp_path: Path) -> N
     assert all(finding["code"] != "legacy_vocabulary_active_path" for finding in payload["findings"])
 
 
+def test_history_provenance_guard_line_is_not_legacy_pollution(tmp_path: Path) -> None:
+    root = tmp_path / "one-person-lab"
+    active = root / "docs" / "active"
+    active.mkdir(parents=True)
+    (active / "current-state-vs-ideal-gap.md").write_text(
+        "# Gap\n\nOwner: `OPL`\nPurpose: `gap`\nState: `active_plan`\nMachine boundary: contracts\n\n"
+        "旧 gateway/frontdoor/Hermes-first wording 只作为 history/provenance/negative guard 阅读，不恢复为 active route。\n",
+        encoding="utf-8",
+    )
+
+    payload = doctor(root)
+
+    assert all(finding["code"] != "legacy_vocabulary_active_path" for finding in payload["findings"])
+
+
 def test_doctor_flags_dated_active_heading_incremental_list(tmp_path: Path) -> None:
     root = tmp_path / "one-person-lab"
     active = root / "docs" / "active"
