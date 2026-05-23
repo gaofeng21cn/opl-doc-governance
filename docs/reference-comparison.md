@@ -15,7 +15,7 @@ Machine boundary: 本文是人读参考对比；本仓行为以 skill、CLI doct
 
 可吸收：repo-native project context、agent instructions、change proposal、spec delta、archive foldback。
 
-已吸收：`init-repo` 可在目标仓写入 `.opl-doc-governance/config.json`、`.opl-doc-governance/agent-entry.md` 和 `.opl-doc-governance/README.md`，让后续 agent 先从 repo 内读取治理规则。
+已吸收：doctor 报告目标 repo 自己已有的 agent guidance、canonical docs、machine truth surface 和验证入口；skill 按这些原生入口启动治理。
 
 不吸收：外部固定 spec 目录结构作为 OPL truth owner。
 

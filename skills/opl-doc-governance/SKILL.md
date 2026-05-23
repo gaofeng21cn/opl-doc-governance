@@ -9,10 +9,9 @@ Use this skill for developer-document governance: helping AI understand current 
 
 ## First Move
 
-1. If the target repo has `.opl-doc-governance/agent-entry.md`, read it first, then read `.opl-doc-governance/config.json`.
-2. Read the target repo's `AGENTS.md`.
-3. Read `TASTE.md` when present.
-4. Read canonical current docs before touching supporting docs:
+1. Read the target repo's `AGENTS.md`.
+2. Read `TASTE.md` when present.
+3. Read canonical current docs before touching supporting docs:
    - `README.md`
    - `docs/README.md`
    - `docs/project.md`
@@ -21,7 +20,7 @@ Use this skill for developer-document governance: helping AI understand current 
    - `docs/invariants.md`
    - `docs/decisions.md`
    - `docs/active/current-state-vs-ideal-gap.md`
-5. Run the doctor when available:
+4. Run the doctor when available:
 
 ```bash
 python3 scripts/opl_doc_doctor.py doctor <repo-root> --format json
@@ -57,21 +56,9 @@ For the full OPL series:
 
 If the user asks how this differs from OpenArc/OpenSpec/Spec Kit, read `docs/reference-comparison.md`.
 
-## Repo-Native Setup
+## Repo-Native Reading
 
-For repositories that should be governed repeatedly by agents, add the local repo-native anchor:
-
-```bash
-python3 scripts/opl_doc_doctor.py init-repo <repo-root> --format json
-```
-
-This writes:
-
-- `.opl-doc-governance/config.json`
-- `.opl-doc-governance/agent-entry.md`
-- `.opl-doc-governance/README.md`
-
-Use `--dry-run` before writing when auditing impact, and `--force` only when intentionally refreshing the generated repo-native files. This anchor is the OPL-native equivalent of an OpenSpec-style local project context: it lets future agents discover governance rules from the repo itself while keeping the repo's existing documentation taxonomy.
+Repo-native means the skill and CLI stay external while the agent works from the target repo's own surfaces: `AGENTS.md`, `TASTE.md`, `README*`, `docs/**`, contracts, source, tests, scripts, package metadata, and repo-local verification commands. Do not install this CLI or generate `.opl-doc-governance/` inside target repos.
 
 ## Lifecycle Model
 

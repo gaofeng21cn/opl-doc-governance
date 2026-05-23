@@ -12,4 +12,4 @@ Machine boundary: 本文是人读硬约束；守门以测试和 review 执行。
 5. 已退役模块、接口、测试和文档入口不保留兼容 alias。
 6. Markdown 完整性不能替代 contracts、tests、CLI/read-model 或 runtime ledger。
 7. doctor 默认只读，不能写目标 repo。
-8. `init-repo` 只能写 `.opl-doc-governance/` 本地治理入口，默认不得覆盖已有入口。
+8. repo-native 指读取目标 repo 自己已有的开发入口，不指向目标 repo 安装本仓 CLI 或生成治理工具目录。
