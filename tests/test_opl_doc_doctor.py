@@ -162,6 +162,7 @@ def test_family_plan_contains_opl_series_workflow() -> None:
     assert set(payload["repos"]) == {"opl", "mas", "mag", "rca", "oma"}
     assert payload["repos"]["oma"] == "opl-meta-agent"
     assert payload["primary_reference_doc_count"] == 10
+    assert "OPL single Active Truth plan" in payload["primary_reference_docs_per_repo"]
     assert payload["goal_mode"]["recommended"] is True
     assert "create_goal" in payload["goal_mode"]["agent_action"]
     assert any("archive" in step or "tombstone" in step for step in payload["workflow"])
@@ -174,6 +175,9 @@ def test_family_plan_json_contains_original_series_governance_prompt_elements() 
     assert len(payload["primary_reference_docs_per_repo"]) == 10
     assert {
         "evaluate_all_docs_item_by_item",
+        "single_active_truth_first",
+        "rewrite_active_truth",
+        "next_round_agent_prompt",
         "cleanup_and_archive_stale_content",
         "unique_task_positioning",
         "fold_long_incremental_lists",
@@ -182,6 +186,8 @@ def test_family_plan_json_contains_original_series_governance_prompt_elements() 
         "absorb_main_and_cleanup_when_complete",
     }.issubset(set(payload["governance_prompt_elements"]))
     assert "series_primary_reference_docs" in payload["governance_prompt_elements"]
+    assert any("Active Truth" in step for step in payload["workflow"])
+    assert any("Agent prompt" in step for step in payload["workflow"])
     assert any("docs 下其他所有文档" in step for step in payload["workflow"])
     assert any("worktree" in step and "subagent" in step for step in payload["workflow"])
 
@@ -198,6 +204,9 @@ def test_family_plan_markdown_contains_original_series_governance_prompt_element
     assert "Goal Mode" in markdown
     assert "create or resume a /goal" in markdown
     assert "10 primary reference docs" in markdown
+    assert "single Active Truth plan" in markdown
+    assert "唯一 Active Truth / SSOT 优先" in markdown
+    assert "下一轮 Agent prompt" in markdown
     assert "opl-meta-agent" in markdown
     assert "逐条评估 docs 下其他所有文档" in markdown
     assert "清理和归档过时内容" in markdown
@@ -228,6 +237,8 @@ def test_family_plan_goal_prompt_is_self_contained_for_codex_goal() -> None:
     goal_prompt = payload["goal_mode"]["objective"]
     assert "OPL series" in goal_prompt
     assert "自动创建或延续 /goal" in goal_prompt
+    assert "single Active Truth plan" in goal_prompt
+    assert "下一轮 Agent prompt" in goal_prompt
     assert "逐条评估" in goal_prompt
     assert "吸收回 main" in goal_prompt
     assert "最终 main checkout" in goal_prompt

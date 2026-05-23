@@ -28,7 +28,7 @@
 
 AI agents can keep building only when the repository tells them what is true now. In long-running development, old plans stay in active docs, historical checklists keep growing, retired interfaces look alive, and the next agent has to spend context reconstructing the real state.
 
-OPL Doc Governance turns that cleanup work into a repeatable steward workflow. It helps Codex read the current repository truth, separate active plans from history, retire stale surfaces, fold process material into archives or tombstones, and finish with fresh verification evidence.
+OPL Doc Governance turns that cleanup work into a repeatable steward workflow. It helps Codex read the current repository truth, rewrite active docs toward the single best Active Truth, retire stale surfaces, fold process material into archives or tombstones, and finish with fresh verification evidence.
 
 The goal is simple: a user should be able to ask for document governance in one sentence, and the agent should know how to start, when to create a `/goal`, how to avoid stale-doc pollution, and how to close the loop.
 
@@ -38,6 +38,7 @@ The goal is simple: a user should be able to ask for document governance in one 
 - **Repo-native reading**: the doctor reports the target repo's own agent guidance, canonical docs, machine-truth surfaces, and verification commands.
 - **Automatic long-horizon mode**: OPL series, multi-repo, or edit-heavy work creates or resumes a `/goal` without the user remembering a long prompt.
 - **A read-only doctor**: the CLI reports missing canonical docs, missing lifecycle signals, stale active wording, and long incremental-list risks.
+- **An autonomous development loop**: ideal state stays as the durable user input; governance refreshes current completion progress, current-state gaps, and the next-round agent prompt from live repo truth.
 - **An OPL series workflow**: generated guidance for `one-person-lab`, `med-autoscience`, `med-autogrant`, `redcube-ai`, `opl-meta-agent`, and future OPL-compatible repositories.
 - **Change packet templates**: a compact active-work packet for changes that need intent, design, tasks, verification, and foldback.
 
@@ -63,8 +64,9 @@ For OPL series, multi-repo cleanup, long-running autonomous work, or tasks that 
 
 - The agent reads the repository guidance, current docs, and live code or contract surfaces before editing.
 - The doctor gives a quick risk map without changing the target repository.
+- The skill treats ideal-state references as the user's maintained intent and derives current progress, open gaps, and the next-round agent prompt from live code, contracts, tests, CLI/read-models, and docs.
 - The skill classifies docs as current truth, active plan, support reference, history, tombstone, or stale pollution.
-- Active docs stay focused on current work; historical process material moves to history or tombstone references.
+- Active docs are rewritten to current truth; historical process material moves to history or tombstone references.
 - Completed work folds back into canonical docs and ends with repo-native verification.
 
 OPL Doc Governance is OPL-native by design. OpenArc, OpenSpec, Spec Kit, Agent OS, and similar projects are useful references, but this repository does not migrate OPL-family projects into an external file layout.
@@ -110,7 +112,7 @@ Every long-lived developer document should have one job:
 | Historical process, retired plans, tombstones | `docs/history/` |
 | Machine truth | source, tests, contracts, CLI/API output, runtime ledger, receipt refs |
 
-The doctor is intentionally read-only. It can identify risks, but it does not declare a repository production-ready and it does not replace code, tests, contracts, read models, or owner receipts.
+The doctor is intentionally read-only and lightweight. It can identify structural risks, but it does not manage document meaning, declare a repository production-ready, or replace Codex reading code, tests, contracts, read models, or owner receipts.
 
 ## Change Packets
 

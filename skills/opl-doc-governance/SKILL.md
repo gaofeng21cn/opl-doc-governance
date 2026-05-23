@@ -5,7 +5,7 @@ description: Use when governing OPL-family developer documentation lifecycle, au
 
 # OPL Doc Governance
 
-Use this skill for developer-document governance: helping AI understand current goals, maintain long-running plans, retire stale docs, and close the software-engineering loop. Do not use it for domain truth, runtime provider ownership, artifact authority, quality verdicts, or owner receipts.
+Use this skill for developer-document governance: helping AI maintain the current single Active Truth from ideal state and live repo truth, derive current completion progress, maintain current-state gaps and next-round agent prompts, retire stale docs, and close the software-engineering loop. Do not use it for domain truth, runtime provider ownership, artifact authority, quality verdicts, or owner receipts.
 
 ## First Move
 
@@ -35,7 +35,7 @@ When the user asks for OPL series governance, multi-repo cleanup, long-running a
 Use this objective shape:
 
 ```text
-使用 OPL Doc Governance，自动创建或延续 /goal，治理 OPL series 的开发文档生命周期；以各 repo 的 ideal-state reference 和 active gap plan 为主要参考，根据 live code、contracts、tests、CLI/read-model 与 docs 的当前事实，逐条评估 README* 与 docs/**/*.md 下其他文档，清理归档过时内容，避免二次污染；保证每个文档只有唯一任务和定位，折叠历史增量长清单，过时模块/接口/测试按理想态直接退役且不保留兼容面；可以并行使用 subagent/worktree，每条线完成后验证、提交、吸收回 main 并清理；最终 main checkout 必须重新验证。
+使用 OPL Doc Governance，自动创建或延续 /goal，治理 OPL series 的开发文档生命周期；以各 repo 的 ideal-state reference 和 single Active Truth plan 为主要参考，根据 live code、contracts、tests、CLI/read-model 与 docs 的当前事实，重写维护当前完成进度、现状与理想态差距、下一轮 Agent prompt；逐条评估 README* 与 docs/**/*.md 下其他文档，清理归档过时内容，避免二次污染；保证每个文档只有唯一任务和定位，active docs 不保存执行流水或历史增量日志，过时模块/接口/测试按理想态直接退役且不保留兼容面；可以并行使用 subagent/worktree，每条线完成后验证、提交、吸收回 main 并清理；最终 main checkout 必须重新验证。
 ```
 
 For a short single-repo read-only audit, run doctor first and do not force `/goal` unless the user asks for cleanup or long-running execution.
@@ -81,18 +81,48 @@ Canonical placement:
 - Historical process, retired plans, old specs, tombstones: `docs/history/`
 - Machine truth: `contracts/`, source, tests, CLI/API output, runtime ledger, receipt refs
 
+## Autonomous Development Loop
+
+This skill must support the user's intended operating model: the user maintains the ideal state, while document governance derives and refreshes the development loop from live repo truth.
+
+Required loop inputs:
+
+- Ideal-state / target-state reference: what the repo should become.
+- Live repo truth: code, contracts, tests, CLI/read-model output, runtime ledgers, and current docs.
+
+Required loop outputs:
+
+- Current completion progress.
+- Current-state vs ideal-state gaps.
+- Next-round agent prompt tied to those gaps.
+
+For OPL-family repos, the active ideal-state gap plan is the usual output location. If a repo uses another canonical active plan, map to that document explicitly. Keep functional / structural gaps separate from test / evidence gaps.
+
+## Active Truth Governance
+
+OPL Doc Governance is Active Truth first. It is not primarily a history-management system.
+
+Hard rules:
+
+- Active docs are rewritten toward the best current truth; do not append execution diaries, dated closeout logs, or long historical checklists.
+- Each governed repo should have one active truth owner for current progress, current gaps, and the next-round agent prompt.
+- The next-round agent prompt must include write scope, non-goals, live truth inputs, verification commands, completion gate, and foldback target.
+- Completed work must remove or rewrite the closed gap in the active truth plan; process trace moves to `docs/history/` or tombstone/provenance.
+- History exists to prevent semantic pollution of Active Truth, not to preserve every intermediate decision in active paths.
+
 ## OPL Series Lifecycle Workflow
 
 Use this when the user asks to refresh OPL series docs from ideal state and gap plans.
 
-1. Treat each governed repo's ideal-state reference and active gap plan as primary references.
+1. Treat each governed repo's ideal-state reference and single Active Truth plan as primary references.
 2. Read current code/contracts/tests/read-model surfaces before editing docs.
-3. Review other `docs/**/*.md` content section by section.
-4. Classify each section as current truth, active plan, support reference, process history, retired/tombstone, or stale pollution.
-5. Fold historical incremental lists into compact current-state tables plus history pointers.
-6. Retire stale modules/interfaces/tests directly once active callers have moved; do not preserve compatibility aliases.
-7. Update canonical docs and archive/tombstone supporting docs so each document has one job.
-8. Run repo-native verification, absorb worktree lanes back to `main`, and clean temporary worktrees/branches.
+3. Rewrite the active plan so it states current completion progress, current-state-vs-ideal gaps, and a next-round agent prompt.
+4. Review other `docs/**/*.md` content section by section.
+5. Classify each section as current truth, active plan, support reference, process history, retired/tombstone, or stale pollution.
+6. Fold historical incremental lists into compact current-state tables plus history/tombstone pointers.
+7. Retire stale modules/interfaces/tests directly once active callers have moved; do not preserve compatibility aliases.
+8. Update canonical docs and archive/tombstone supporting docs so each document has one job.
+9. Run repo-native verification, absorb worktree lanes back to `main`, and clean temporary worktrees/branches.
 
 ## Change Packet
 
@@ -112,6 +142,7 @@ Templates live under `templates/change-packet/`.
 
 - Do not migrate OPL-family repos to OpenArc/OpenSpec/Spec Kit file names.
 - Do not treat Markdown completeness as production readiness.
+- Do not treat active docs as an execution log; Active Truth is a current-state rewrite surface.
 - Do not put runtime truth, domain truth, quality verdicts, artifact authority, or owner receipts in docs.
 - Do not keep compatibility aliases or facade docs after retirement gates are met.
 - Do not create a second changelog/memory system when the repo already has history/process and receipt ledgers.

@@ -59,11 +59,11 @@ python3 scripts/install_local_plugin.py
 使用 OPL Doc Governance 审计这里的开发文档生命周期。
 ```
 
-doctor 的 JSON 会报告目标 repo 已有的 agent guidance、canonical docs、machine truth surface 和验证入口；这就是面向自动开发的 repo-native 能力。
+doctor 的 JSON 会报告目标 repo 已有的 agent guidance、canonical docs、machine truth surface 和验证入口，并提示明显结构风险。文档内容是否符合 Active Truth / SSOT，由 Codex 按 skill 读取 ideal-state reference、active plan、live code/contracts/tests/read-model 后判断和修改。
 
 ## `/goal` 模板
 
-skill 会优先主动创建或延续 `/goal`；[goal-opl-family-doc-lifecycle.md](../templates/goal-opl-family-doc-lifecycle.md) 是人工查看和外部复制用模板。该模板已经整合原先不定期手动执行的 OPL series 文档治理提示，包括按 repo 读取 ideal-state reference 与 active gap plan、逐条评估 README/docs、清理归档、唯一任务定位、长清单折叠、直接退役旧模块/接口/测试、并行 worktree/subagent、吸收 main 和清理。
+skill 会优先主动创建或延续 `/goal`；[goal-opl-family-doc-lifecycle.md](../templates/goal-opl-family-doc-lifecycle.md) 是人工查看和外部复制用模板。该模板已经整合原先不定期手动执行的 OPL series 文档治理提示，包括按 repo 读取 ideal-state reference 与 single Active Truth plan、自动重写完成进度/差距/下一轮 Agent prompt、逐条评估 README/docs、清理归档、唯一任务定位、长清单折叠、直接退役旧模块/接口/测试、并行 worktree/subagent、吸收 main 和清理。
 
 ## Change Packet 模板
 

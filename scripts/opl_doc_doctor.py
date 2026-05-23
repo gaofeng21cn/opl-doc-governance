@@ -343,7 +343,7 @@ def build_primary_reference_docs(repo_paths: dict[str, str]) -> list[str]:
     for repo_id in repo_paths:
         label = repo_id.upper()
         docs.append(f"{label} ideal-state / target-state reference")
-        docs.append(f"{label} active gap and improvement plan")
+        docs.append(f"{label} single Active Truth plan")
     return docs
 
 
@@ -362,10 +362,12 @@ def build_goal_objective(repo_paths: dict[str, str]) -> str:
     return (
         "使用 OPL Doc Governance，自动创建或延续 /goal，治理 OPL series "
         f"repo（{repo_list}）的开发文档生命周期；以各 repo 的 ideal-state "
-        "reference 和 active gap plan 为主要参考，根据 live code、contracts、"
-        "tests、CLI/read-model 与 docs 的当前事实，逐条评估 README* 与 "
-        "docs/**/*.md 下其他文档，清理归档过时内容，避免二次污染；保证每个"
-        "文档只有唯一任务和定位，折叠历史增量长清单，过时模块/接口/测试按"
+        "reference 和 single Active Truth plan 为主要参考，根据 live code、"
+        "contracts、tests、CLI/read-model 与 docs 的当前事实，重写维护当前"
+        "完成进度、现状与理想态差距、下一轮 Agent prompt；逐条评估 "
+        "README* 与 docs/**/*.md 下其他文档，清理归档过时内容，避免二次污染；"
+        "保证每个文档只有唯一任务和定位，active docs 不保存执行流水或历史"
+        "增量日志，过时模块/接口/测试按"
         "理想态直接退役且不保留兼容面；可以并行使用 subagent/worktree，"
         "每条线完成后验证、提交、吸收回 main 并清理；最终 main checkout "
         "必须重新验证，且 canonical docs、history/tombstone 与必要的 "
@@ -378,6 +380,9 @@ def family_plan(repo_paths: dict[str, str] | None = None) -> dict[str, Any]:
     primary_reference_docs = build_primary_reference_docs(paths)
     governance_prompt_elements = [
         "series_primary_reference_docs",
+        "single_active_truth_first",
+        "rewrite_active_truth",
+        "next_round_agent_prompt",
         "evaluate_all_docs_item_by_item",
         "cleanup_and_archive_stale_content",
         "unique_task_positioning",
@@ -387,8 +392,11 @@ def family_plan(repo_paths: dict[str, str] | None = None) -> dict[str, Any]:
         "absorb_main_and_cleanup_when_complete",
     ]
     steps = [
-        "Use the OPL series primary reference docs: each governed repo contributes its ideal-state reference plus its active gap and improvement plan.",
+        "Use the OPL series primary reference docs: each governed repo contributes its ideal-state reference plus its single Active Truth plan.",
         "Read each repo's AGENTS.md, TASTE.md when present, status, architecture, invariants, docs portfolio guidance, and the series primary reference docs before editing.",
+        "Treat ideal-state as the user-maintained target and rewrite the active plan to the best current truth from live code, contracts, tests, CLI/read-model, and docs.",
+        "Active docs must keep current completion progress, current-state-vs-ideal gaps, and the next-round Agent prompt; do not append execution diaries, dated closeout logs, or historical checklists.",
+        "The next-round Agent prompt should include write scope, non-goals, live truth inputs, verification commands, completion gate, and foldback target.",
         "逐条评估 docs 下其他所有文档；classify each section as current truth, active gap, support reference, process history, retired/tombstone, or stale pollution.",
         "清理和归档过时内容，避免二次污染；route history to docs/history or tombstone refs instead of active docs.",
         "每个文档必须有唯一任务和定位；update canonical docs so every long-lived document has one owner, one purpose, one state, and one machine boundary.",
@@ -412,6 +420,8 @@ def family_plan(repo_paths: dict[str, str] | None = None) -> dict[str, Any]:
         "workflow": steps,
         "completion_gate": [
             "canonical docs reflect current truth",
+            "active docs were rewritten to the single best Active Truth",
+            "active truth includes current completion progress, current-state gaps, and next-round Agent prompt",
             "stale process material is archived or tombstoned",
             "no active compatibility-resurrection wording remains",
             "contracts/tests/read-model references are not contradicted by prose",
@@ -467,6 +477,9 @@ def print_family_markdown(payload: dict[str, Any]) -> None:
     print("## Governance Prompt Elements")
     labels = {
         "series_primary_reference_docs": "OPL series primary reference docs",
+        "single_active_truth_first": "唯一 Active Truth / SSOT 优先",
+        "rewrite_active_truth": "重写 active truth 到当前最优真相",
+        "next_round_agent_prompt": "下一轮 Agent prompt",
         "evaluate_all_docs_item_by_item": "逐条评估 docs 下其他所有文档",
         "cleanup_and_archive_stale_content": "清理和归档过时内容",
         "unique_task_positioning": "每个文档必须有唯一任务和定位",

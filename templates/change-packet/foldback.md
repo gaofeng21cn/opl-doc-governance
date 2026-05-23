@@ -14,6 +14,12 @@ Machine boundary: 本文规划完成后的文档折叠；最终真相以 canonic
 
 - Remaining functional / structural gaps:
 - Remaining test / evidence gaps:
+- Next-round Agent prompt:
+  - Write scope:
+  - Non-goals:
+  - Live truth inputs:
+  - Verification commands:
+  - Completion / foldback gate:
 
 ## History Destinations
 
