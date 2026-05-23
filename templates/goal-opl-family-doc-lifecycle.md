@@ -23,6 +23,7 @@
 - 每个 repo 先读根层 `AGENTS.md`，存在 `TASTE.md` 时先按当前 `TASTE.md` 校准。
 - 读 canonical docs：`README*`、`docs/README*`、`docs/project.md`、`docs/status.md`、`docs/architecture.md`、`docs/invariants.md`、`docs/decisions.md`。
 - 读 single Active Truth plan 和 ideal-state reference，并用 live source/contracts/tests/read-model 验证重要断言。
+- 如果某个 repo 缺少稳定 active truth owner，使用 OPL Doc Governance 的 `templates/active-truth-plan.md` 作为章节形状；若已有 canonical active plan，则把同样章节映射进去，不新增第二套计划。
 - 在 active plan 中重写三类派生输出：当前完成进度、现状与理想态差距、下一轮 Agent prompt。
 - 下一轮 Agent prompt 必须包含写入范围、禁止范围、live truth 输入、验证命令、完成口径和 foldback 目标。
 - 开发完成后删除或重写已关闭 gap；执行流水、完成记录和弯路归入 `docs/history/` 或 tombstone/provenance。

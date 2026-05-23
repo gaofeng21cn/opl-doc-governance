@@ -177,6 +177,7 @@ def test_family_plan_json_contains_original_series_governance_prompt_elements() 
         "evaluate_all_docs_item_by_item",
         "single_active_truth_first",
         "rewrite_active_truth",
+        "active_truth_plan_shape",
         "next_round_agent_prompt",
         "cleanup_and_archive_stale_content",
         "unique_task_positioning",
@@ -187,6 +188,7 @@ def test_family_plan_json_contains_original_series_governance_prompt_elements() 
     }.issubset(set(payload["governance_prompt_elements"]))
     assert "series_primary_reference_docs" in payload["governance_prompt_elements"]
     assert any("Active Truth" in step for step in payload["workflow"])
+    assert any("active-truth-plan.md" in step for step in payload["workflow"])
     assert any("Agent prompt" in step for step in payload["workflow"])
     assert any("docs 下其他所有文档" in step for step in payload["workflow"])
     assert any("worktree" in step and "subagent" in step for step in payload["workflow"])
@@ -206,6 +208,8 @@ def test_family_plan_markdown_contains_original_series_governance_prompt_element
     assert "10 primary reference docs" in markdown
     assert "single Active Truth plan" in markdown
     assert "唯一 Active Truth / SSOT 优先" in markdown
+    assert "Active Truth plan 推荐形状" in markdown
+    assert "active-truth-plan.md" in markdown
     assert "下一轮 Agent prompt" in markdown
     assert "opl-meta-agent" in markdown
     assert "逐条评估 docs 下其他所有文档" in markdown

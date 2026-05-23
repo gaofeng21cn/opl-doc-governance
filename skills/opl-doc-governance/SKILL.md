@@ -56,6 +56,8 @@ For the full OPL series:
 
 If the user asks how this differs from OpenArc/OpenSpec/Spec Kit, read `docs/reference-comparison.md`.
 
+For a repo that lacks a clear active truth owner, use `templates/active-truth-plan.md` from this plugin as the recommended shape. Do not copy it blindly when the target repo already has a canonical active plan; map the same sections into the repo's existing owner document.
+
 ## Repo-Native Reading
 
 Repo-native means the skill and CLI stay external while the agent works from the target repo's own surfaces: `AGENTS.md`, `TASTE.md`, `README*`, `docs/**`, contracts, source, tests, scripts, package metadata, and repo-local verification commands. Do not install this CLI or generate `.opl-doc-governance/` inside target repos.
@@ -96,7 +98,23 @@ Required loop outputs:
 - Current-state vs ideal-state gaps.
 - Next-round agent prompt tied to those gaps.
 
-For OPL-family repos, the active ideal-state gap plan is the usual output location. If a repo uses another canonical active plan, map to that document explicitly. Keep functional / structural gaps separate from test / evidence gaps.
+For OPL-family repos, the active ideal-state gap plan is the usual output location. If a repo uses another canonical active plan, map to that document explicitly. Keep functional / structural gaps separate from test / evidence gaps. If no stable shape exists, use the bundled `templates/active-truth-plan.md` sections:
+
+- Ideal-state reference.
+- Current completion progress.
+- Functional / structural gaps.
+- Test / evidence gaps.
+- Next-round agent prompt.
+- History / tombstone foldback.
+
+Rewrite algorithm:
+
+1. Anchor the ideal state from the user-maintained target-state reference; do not derive the ideal from current implementation.
+2. Read live repo truth for each target area: source, contracts, tests, CLI/read-model output, runtime ledgers, and canonical docs.
+3. Classify each existing active-plan item as `done`, `open`, `blocked`, `evidence_gap`, `retired`, or `stale_pollution`.
+4. Replace the active plan with the best current truth: progress table, current gaps, and the next-round agent prompt. Do not preserve stale rows for chronology.
+5. Move only useful provenance into history/tombstone, especially no-resurrection guards for retired surfaces.
+6. Run repo-native verification and rewrite the plan again if verification changes the truth.
 
 ## Active Truth Governance
 

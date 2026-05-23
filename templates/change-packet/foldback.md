@@ -12,6 +12,7 @@ Machine boundary: 本文规划完成后的文档折叠；最终真相以 canonic
 
 ## Active Baton
 
+- Active truth owner document:
 - Remaining functional / structural gaps:
 - Remaining test / evidence gaps:
 - Next-round Agent prompt:

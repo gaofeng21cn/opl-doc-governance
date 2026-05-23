@@ -22,6 +22,8 @@ Machine boundary: 本文是人读架构；可执行行为以 `scripts/opl_doc_do
 
 用户只需要维护 ideal-state / target-state reference。治理流程必须从 live source、contracts、tests、CLI/read-model 和当前 docs 中重写三个派生输出：当前完成进度、现状与理想态差距、下一轮 Agent prompt。通常落点是各 repo 的 single Active Truth plan；若 repo 使用其他 canonical active plan，需要显式映射，不能新增第二套计划文档。
 
+当目标 repo 缺少稳定 active owner 时，skill 可使用 `templates/active-truth-plan.md` 的最小形状：ideal-state reference、current completion progress、functional/structural gaps、test/evidence gaps、next-round Agent prompt 和 history/tombstone foldback。该模板只定义文档形状，不承担语义判断。
+
 CLI 不承担 Active Truth 语义治理。doctor 只提示明显结构风险；真正的文档内容判断由 Codex 按 skill 读取 live repo truth、ideal-state reference、active plan 和 machine-readable evidence 后执行。
 
 ## 边界

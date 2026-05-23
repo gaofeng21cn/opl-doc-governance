@@ -61,6 +61,10 @@ python3 scripts/install_local_plugin.py
 
 doctor 的 JSON 会报告目标 repo 已有的 agent guidance、canonical docs、machine truth surface 和验证入口，并提示明显结构风险。文档内容是否符合 Active Truth / SSOT，由 Codex 按 skill 读取 ideal-state reference、active plan、live code/contracts/tests/read-model 后判断和修改。
 
+## Active Truth Plan 模板
+
+[active-truth-plan.md](../templates/active-truth-plan.md) 是 single Active Truth plan 的推荐形状。目标 repo 已经有 canonical active plan 时，不新增第二份计划文档；把模板中的 `Ideal-State Reference`、`Current Completion Progress`、`Current-State vs Ideal-State Gaps`、`Next-Round Agent Prompt` 和 `History / Tombstone Foldback` 映射进现有 owner 文档即可。
+
 ## `/goal` 模板
 
 skill 会优先主动创建或延续 `/goal`；[goal-opl-family-doc-lifecycle.md](../templates/goal-opl-family-doc-lifecycle.md) 是人工查看和外部复制用模板。该模板已经整合原先不定期手动执行的 OPL series 文档治理提示，包括按 repo 读取 ideal-state reference 与 single Active Truth plan、自动重写完成进度/差距/下一轮 Agent prompt、逐条评估 README/docs、清理归档、唯一任务定位、长清单折叠、直接退役旧模块/接口/测试、并行 worktree/subagent、吸收 main 和清理。
