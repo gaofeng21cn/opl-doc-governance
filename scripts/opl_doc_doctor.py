@@ -114,6 +114,52 @@ DATED_HEADING_RE = re.compile(
     r"(?:\b|[：:\s-])"
 )
 CHECKBOX_ITEM_RE = re.compile(r"^\s*[-*+]\s+\[[ xX]\]\s+")
+PROCESS_LOG_HEADING_RE = re.compile(
+    r"^#{1,6}\s+"
+    r"(?:execution log|process log|closeout log|timeline|changelog|"
+    r"执行记录|执行流水|过程记录|完成记录|变更记录|历史增量)"
+    r"(?:\b|[：:\s-])",
+    re.IGNORECASE,
+)
+
+ACTIVE_PROGRESS_MARKERS = (
+    "Current Completion Progress",
+    "Current progress",
+    "当前完成进度",
+    "完成进度",
+)
+
+ACTIVE_GAP_MARKERS = (
+    "Current-State vs Ideal-State Gaps",
+    "Functional / Structural Gaps",
+    "Test / Evidence Gaps",
+    "现状与理想",
+    "功能/结构差距",
+    "测试/证据差距",
+)
+
+NEXT_AGENT_PROMPT_MARKERS = (
+    "Next-Round Agent Prompt",
+    "Next-round Agent Prompt",
+    "下一轮 Agent prompt",
+    "下一轮 Agent Prompt",
+    "下一轮提示词",
+)
+
+NEXT_AGENT_PROMPT_REQUIRED_MARKERS = {
+    "write_scope": ("Write scope", "写入范围", "变更范围", "写入边界"),
+    "non_goals": ("Non-goals", "Non-goals:", "禁止范围", "非目标", "不改范围"),
+    "live_truth_inputs": (
+        "Live truth inputs",
+        "live truth 输入",
+        "live repo truth",
+        "当前事实输入",
+        "读取面",
+    ),
+    "verification_commands": ("Verification commands", "验证命令", "验证入口"),
+    "completion_gate": ("Completion", "completion gate", "完成口径", "完成门槛"),
+    "foldback_target": ("Foldback", "foldback", "折回", "归档目标", "foldback target"),
+}
 
 
 @dataclass(frozen=True)
@@ -263,6 +309,98 @@ def active_truth_reference_docs(root: Path) -> list[str]:
     return refs
 
 
+def active_truth_owner_docs(root: Path, active_gap_docs: list[str]) -> list[str]:
+    owner_docs = [
+        rel
+        for rel in active_gap_docs
+        if ACTIVE_TRUTH_DOC_NAME_RE.search(Path(rel).name)
+    ]
+    return owner_docs or active_gap_docs
+
+
+def contains_marker(text: str, markers: tuple[str, ...]) -> bool:
+    lowered = text.lower()
+    return any(marker.lower() in lowered for marker in markers)
+
+
+def missing_next_prompt_marker_groups(text: str) -> list[str]:
+    return [
+        group
+        for group, markers in NEXT_AGENT_PROMPT_REQUIRED_MARKERS.items()
+        if not contains_marker(text, markers)
+    ]
+
+
+def process_log_headings(text: str) -> list[str]:
+    return [
+        line.strip()
+        for line in text.splitlines()
+        if PROCESS_LOG_HEADING_RE.match(line)
+    ]
+
+
+def inspect_active_truth_health(root: Path, active_gap_docs: list[str]) -> dict[str, Any]:
+    owner_docs = active_truth_owner_docs(root, active_gap_docs)
+    documents = []
+    missing_total = 0
+    process_log_total = 0
+    prompt_not_ready_total = 0
+
+    for rel in owner_docs:
+        path = root / rel
+        text = read_text(path) if path.exists() else ""
+        has_progress = contains_marker(text, ACTIVE_PROGRESS_MARKERS)
+        has_gaps = contains_marker(text, ACTIVE_GAP_MARKERS)
+        has_next_prompt = contains_marker(text, NEXT_AGENT_PROMPT_MARKERS)
+        missing_prompt_groups = (
+            missing_next_prompt_marker_groups(text) if has_next_prompt else list(NEXT_AGENT_PROMPT_REQUIRED_MARKERS)
+        )
+        headings = process_log_headings(text)
+        missing_items = []
+        if not has_progress:
+            missing_items.append("current_completion_progress")
+        if not has_gaps:
+            missing_items.append("current_state_vs_ideal_gaps")
+        if not has_next_prompt:
+            missing_items.append("next_round_agent_prompt")
+        if missing_prompt_groups:
+            missing_items.append("next_round_agent_prompt_executable_fields")
+
+        missing_total += len(missing_items)
+        process_log_total += len(headings)
+        if missing_prompt_groups:
+            prompt_not_ready_total += 1
+
+        documents.append(
+            {
+                "path": rel,
+                "has_current_completion_progress": has_progress,
+                "has_current_state_vs_ideal_gaps": has_gaps,
+                "has_next_round_agent_prompt": has_next_prompt,
+                "next_round_agent_prompt_ready": has_next_prompt and not missing_prompt_groups,
+                "missing_next_prompt_fields": missing_prompt_groups,
+                "process_log_headings": headings,
+                "missing_items": missing_items,
+            }
+        )
+
+    status = "pass"
+    if not owner_docs:
+        status = "missing_active_truth_owner"
+    elif missing_total or process_log_total:
+        status = "attention_required"
+
+    return {
+        "status": status,
+        "owner_docs": owner_docs,
+        "checked_doc_count": len(owner_docs),
+        "missing_item_count": missing_total,
+        "process_log_heading_count": process_log_total,
+        "next_round_agent_prompt_not_ready_count": prompt_not_ready_total,
+        "documents": documents,
+    }
+
+
 def doctor(root: Path) -> dict[str, Any]:
     root = root.resolve()
     profile = detect_profile(root)
@@ -332,6 +470,59 @@ def doctor(root: Path) -> dict[str, Any]:
             )
 
     active_gap_docs = active_truth_reference_docs(root)
+    active_truth_health = inspect_active_truth_health(root, active_gap_docs)
+
+    if not active_truth_health["owner_docs"] and profile in {"opl_framework", "foundry_agent", "opl_meta_agent"}:
+        findings.append(
+            Finding(
+                "warning",
+                "active_truth_owner_missing",
+                "docs/active",
+                "repo has no detected single Active Truth owner for current progress, gaps, and next-round prompt",
+                "map or create one active truth owner before autonomous long-horizon development",
+            )
+        )
+    for document in active_truth_health["documents"]:
+        path = document["path"]
+        missing_items = document["missing_items"]
+        if any(
+            item in missing_items
+            for item in (
+                "current_completion_progress",
+                "current_state_vs_ideal_gaps",
+                "next_round_agent_prompt",
+            )
+        ):
+            findings.append(
+                Finding(
+                    "warning",
+                    "active_truth_plan_incomplete",
+                    path,
+                    f"active truth owner is missing: {', '.join(missing_items)}",
+                    "rewrite the active owner to current progress, current gaps, and an executable next-round Agent prompt",
+                )
+            )
+        elif "next_round_agent_prompt_executable_fields" in missing_items:
+            findings.append(
+                Finding(
+                    "warning",
+                    "active_next_prompt_not_executable",
+                    path,
+                    "next-round Agent prompt exists but lacks executable fields",
+                    "include write scope, non-goals, live truth inputs, verification commands, completion gate, and foldback target",
+                )
+            )
+        if document["process_log_headings"]:
+            findings.append(
+                Finding(
+                    "warning",
+                    "active_process_log_in_active_doc",
+                    path,
+                    "active truth owner contains process-log headings: "
+                    + ", ".join(document["process_log_headings"][:3]),
+                    "move execution diaries, closeout logs, and historical timelines to docs/history or tombstone/provenance",
+                )
+            )
 
     return {
         "root": str(root),
@@ -341,15 +532,23 @@ def doctor(root: Path) -> dict[str, Any]:
         "canonical_dirs": dir_status,
         "markdown_doc_count": len(docs),
         "active_gap_reference_docs": active_gap_docs,
+        "active_truth_health": active_truth_health,
         "finding_count": len(findings),
         "findings": [finding.to_json() for finding in findings],
-        "recommendation": recommend(profile, findings, active_gap_docs),
+        "recommendation": recommend(profile, findings, active_gap_docs, active_truth_health),
     }
 
 
-def recommend(profile: str, findings: list[Finding], active_gap_docs: list[str]) -> str:
+def recommend(
+    profile: str,
+    findings: list[Finding],
+    active_gap_docs: list[str],
+    active_truth_health: dict[str, Any],
+) -> str:
     if any(finding.code == "legacy_vocabulary_active_path" for finding in findings):
         return "Run an active-doc retirement pass: rewrite current truth, then archive or tombstone stale historical wording."
+    if active_truth_health["status"] == "attention_required":
+        return "Refresh the Active Truth owner from live repo truth before autonomous development."
     if not active_gap_docs and profile in {"opl_framework", "foundry_agent"}:
         return "Add or map the active ideal-state gap document before long-horizon autonomous development."
     if findings:
@@ -475,6 +674,16 @@ def print_markdown(payload: dict[str, Any]) -> None:
     surfaces = payload["repo_native_surfaces"]
     print(f"Agent guidance: `{len(surfaces['agent_guidance'])}`")
     print(f"Verification surfaces: `{len(surfaces['verification'])}`")
+    print()
+    print("## Active Truth Health")
+    health = payload["active_truth_health"]
+    print(f"- status: `{health['status']}`")
+    print(f"- checked owner docs: `{health['checked_doc_count']}`")
+    print(f"- missing items: `{health['missing_item_count']}`")
+    print(f"- process-log headings: `{health['process_log_heading_count']}`")
+    for document in health["documents"]:
+        prompt_ready = "yes" if document["next_round_agent_prompt_ready"] else "no"
+        print(f"- `{document['path']}` next prompt ready: `{prompt_ready}`")
     print()
     print("## Findings")
     if not payload["findings"]:

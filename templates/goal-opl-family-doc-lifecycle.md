@@ -27,9 +27,9 @@
 - 对每个 active plan 和 canonical doc 的实质 claim 做 live truth 语义审计：读取 source、contracts、tests、package scripts、CLI/read-model 输出、runtime ledger、receipt 和 blocker，判断文档内容是当前事实、差距、证据尾项、历史 provenance 还是 stale pollution。
 - 先发现 active truth owner：优先 repo 明示入口和 `docs/active/current-state-vs-ideal-gap.md`；多份 active plan 抢同一职责时保留 canonical owner，重写或退役重复文档。
 - 如果某个 repo 缺少稳定 active truth owner，使用 OPL Doc Governance 的 `templates/active-truth-plan.md` 作为章节形状；若已有 canonical active plan，则把同样章节映射进去，不新增第二套计划。
-- 在 active plan 中重写三类派生输出：当前完成进度、现状与理想态差距、下一轮 Agent prompt。
+- 在 active plan 中重写三类派生输出：当前完成进度、现状与理想态差距、下一轮 Agent prompt；这个 prompt 就是下一轮 `/goal` 或长线 Codex 执行入口，不是普通 TODO。
 - 逐段审阅 `README*` 和 `docs/**/*.md`，根据 live truth 更新文档内容、合并重复职责、清理过时路径；不是只做结构扫描修复。
-- 下一轮 Agent prompt 必须能直接作为 `/goal` 或长线 Codex prompt 使用，并包含写入范围、禁止范围、live truth 输入、验证命令、完成口径和 foldback 目标。
+- 下一轮 Agent prompt 必须能直接作为 `/goal` 或长线 Codex prompt 使用，并包含目标、写入范围、禁止范围、live truth 输入、必做动作、验证命令、完成口径和 foldback 目标。
 - 开发完成后删除或重写已关闭 gap；执行流水、完成记录和弯路归入 `docs/history/` 或 tombstone/provenance。
 - closeout 前检查：closed gap 已删除或重写、当前事实已折回 canonical docs、active path 不保留完成过程包、下一轮 prompt 只保留仍未完成的工作。
 - 可以用 subagent 并行开多个 worktree 推进，但每条线必须有清晰 write scope。

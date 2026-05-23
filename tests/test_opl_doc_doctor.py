@@ -173,6 +173,102 @@ def test_doctor_detects_repo_native_active_truth_plan_names(tmp_path: Path) -> N
     assert payload["recommendation"] != "Add or map the active ideal-state gap document before long-horizon autonomous development."
 
 
+def test_doctor_reports_active_truth_health_for_executable_plan(tmp_path: Path) -> None:
+    root = tmp_path / "one-person-lab"
+    active = root / "docs" / "active"
+    active.mkdir(parents=True)
+    (active / "current-state-vs-ideal-gap.md").write_text(
+        "# Current State vs Ideal Gap\n\n"
+        "Owner: `OPL`\nPurpose: `active_truth_plan`\nState: `active_plan`\n"
+        "Machine boundary: contracts\n\n"
+        "## Current Completion Progress\n\n"
+        "| Area | Current status | Live evidence |\n| --- | --- | --- |\n"
+        "| runtime | partial | src/runtime.ts |\n\n"
+        "## Current-State vs Ideal-State Gaps\n\n"
+        "### Functional / Structural Gaps\n\n"
+        "| Gap | Ideal state | Current state |\n| --- | --- | --- |\n"
+        "| provider | Temporal | local proof only |\n\n"
+        "### Test / Evidence Gaps\n\n"
+        "| Gap | Existing implementation state | Missing evidence |\n| --- | --- | --- |\n"
+        "| soak | implemented | long-soak receipt |\n\n"
+        "## Next-Round Agent Prompt\n\n"
+        "Write scope:\n- docs and runtime tests\n\n"
+        "Non-goals:\n- domain verdicts\n\n"
+        "Live truth inputs:\n- source/contracts/tests\n\n"
+        "Verification commands:\n```bash\n./scripts/verify.sh\n```\n\n"
+        "Completion / foldback gate:\n- active plan rewritten\n\n"
+        "Foldback target:\n- docs/status.md\n",
+        encoding="utf-8",
+    )
+
+    payload = doctor(root)
+
+    health = payload["active_truth_health"]
+    assert health["status"] == "pass"
+    assert health["checked_doc_count"] == 1
+    assert health["missing_item_count"] == 0
+    assert health["documents"][0]["next_round_agent_prompt_ready"] is True
+    assert all(finding["code"] != "active_truth_plan_incomplete" for finding in payload["findings"])
+
+
+def test_doctor_flags_active_truth_plan_without_agent_prompt_fields(tmp_path: Path) -> None:
+    root = tmp_path / "med-autogrant"
+    active = root / "docs" / "active"
+    active.mkdir(parents=True)
+    (active / "mag-ideal-state-gap-plan.md").write_text(
+        "# MAG Ideal State Gap Plan\n\n"
+        "Owner: `MAG`\nPurpose: `active_truth_plan`\nState: `active_plan`\n"
+        "Machine boundary: contracts\n\n"
+        "## Current Completion Progress\n\n"
+        "Current progress exists.\n\n"
+        "## Current-State vs Ideal-State Gaps\n\n"
+        "Functional / Structural Gaps exist.\n\n"
+        "## Next-Round Agent Prompt\n\n"
+        "- Fix the remaining things.\n",
+        encoding="utf-8",
+    )
+
+    payload = doctor(root)
+
+    codes = {finding["code"] for finding in payload["findings"]}
+    assert payload["active_truth_health"]["status"] == "attention_required"
+    assert "active_next_prompt_not_executable" in codes
+    document = payload["active_truth_health"]["documents"][0]
+    assert document["next_round_agent_prompt_ready"] is False
+    assert "write_scope" in document["missing_next_prompt_fields"]
+    assert "verification_commands" in document["missing_next_prompt_fields"]
+
+
+def test_doctor_flags_process_log_headings_in_active_truth_owner(tmp_path: Path) -> None:
+    root = tmp_path / "redcube-ai"
+    active = root / "docs" / "active"
+    active.mkdir(parents=True)
+    (active / "rca-ideal-state-gap-plan.md").write_text(
+        "# RCA Ideal State Gap Plan\n\n"
+        "Owner: `RCA`\nPurpose: `active_truth_plan`\nState: `active_plan`\n"
+        "Machine boundary: contracts\n\n"
+        "## Current Completion Progress\n\n"
+        "Current progress exists.\n\n"
+        "## Current-State vs Ideal-State Gaps\n\n"
+        "Functional / Structural Gaps exist.\n\n"
+        "## Next-Round Agent Prompt\n\n"
+        "Write scope:\n- docs\n\n"
+        "Non-goals:\n- runtime\n\n"
+        "Live truth inputs:\n- contracts\n\n"
+        "Verification commands:\n```bash\n./scripts/verify.sh\n```\n\n"
+        "Completion / foldback gate:\n- done\n\n"
+        "Foldback target:\n- docs/status.md\n\n"
+        "## 执行记录\n\n"
+        "- 2026-05-23 completed a lane.\n",
+        encoding="utf-8",
+    )
+
+    payload = doctor(root)
+
+    assert payload["active_truth_health"]["process_log_heading_count"] == 1
+    assert any(finding["code"] == "active_process_log_in_active_doc" for finding in payload["findings"])
+
+
 def test_family_plan_contains_opl_series_workflow() -> None:
     payload = family_plan()
 

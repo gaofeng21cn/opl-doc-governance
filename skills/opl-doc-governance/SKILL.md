@@ -27,7 +27,7 @@ Use this skill for developer-document governance: helping AI maintain the curren
 opl-doc-doctor doctor <repo-root> --format json
 ```
 
-Use doctor output only as a preflight risk map. It is never the governance input, never the task list, and never proof that docs are current. Important claims must be verified from live source, contracts, tests, CLI/read-model output, runtime ledgers, receipts, and the actual document text.
+Use doctor output only as a preflight risk map. It is never the governance input, never the task list, and never proof that docs are current. Its `active_truth_health` output is only a shape signal for missing progress/gap/prompt sections, non-executable next prompts, or active process-log pollution. Important claims must still be verified from live source, contracts, tests, CLI/read-model output, runtime ledgers, receipts, and the actual document text.
 
 For edit work, do not start by fixing doctor findings. Start by building the semantic input set: ideal state, current active truth plan, relevant canonical/support docs, implementation surfaces, verification/read-model surfaces, and stale/retired candidate docs.
 
@@ -177,7 +177,7 @@ Hard rules:
 - Do not update docs from the existing prose alone. Every substantive current-state, progress, gap, retirement, and next-step claim must be checked against live repo truth or marked as an evidence gap.
 - Active docs are rewritten toward the best current truth; do not append execution diaries, dated closeout logs, or long historical checklists.
 - Each governed repo should have one active truth owner for current progress, current gaps, and the next-round agent prompt.
-- The next-round agent prompt must include write scope, non-goals, live truth inputs, verification commands, completion gate, and foldback target.
+- The next-round agent prompt is the user's intended autonomous-development baton, not a TODO list. It must include objective, write scope, non-goals, live truth inputs, required actions, verification commands, completion gate, and foldback target so it can be pasted into `/goal`.
 - Completed work must remove or rewrite the closed gap in the active truth plan; process trace moves to `docs/history/` or tombstone/provenance.
 - Before closeout, confirm closed gaps were removed or rewritten, canonical docs gained durable current truth, active paths contain no completed process packet, and the next-round prompt only names remaining work.
 - History exists to prevent semantic pollution of Active Truth, not to preserve every intermediate decision in active paths.
@@ -187,7 +187,7 @@ Hard rules:
 Use this when the user asks to refresh OPL series docs from ideal state and gap plans.
 
 1. Treat each governed repo's ideal-state reference and single Active Truth plan as primary references.
-2. Run doctor only as preflight, then set it aside.
+2. Run doctor only as preflight, then set it aside; use `active_truth_health` only to notice shape risks, not as semantic proof.
 3. Read current code/contracts/tests/read-model surfaces before editing docs.
 4. For each active plan, canonical doc, and stale/retired candidate, compare substantive claims against live repo truth section by section.
 5. Rewrite the active plan so it states current completion progress, current-state-vs-ideal gaps, and a next-round agent prompt.
