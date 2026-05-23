@@ -38,6 +38,7 @@ The goal is simple: a user should be able to ask for document governance in one 
 - **Repo-native reading**: the doctor reports the target repo's own agent guidance, canonical docs, machine-truth surfaces, and verification commands.
 - **Automatic long-horizon mode**: OPL series, multi-repo, or edit-heavy work creates or resumes a `/goal` without the user remembering a long prompt.
 - **A read-only doctor**: the CLI reports missing canonical docs, missing lifecycle signals, stale active wording, and long incremental-list risks.
+- **A live-truth semantic audit loop**: Codex reads code, contracts, tests, read-models, ledgers, receipts, blockers, and docs section by section before rewriting prose.
 - **An autonomous development loop**: ideal state stays as the durable user input; governance refreshes current completion progress, current-state gaps, and the next-round agent prompt from live repo truth.
 - **An Active Truth plan template**: a recommended shape for the single active owner of progress, gaps, executable next-round prompts, routing decisions, and foldback targets.
 - **An OPL series workflow**: generated guidance for `one-person-lab`, `med-autoscience`, `med-autogrant`, `redcube-ai`, `opl-meta-agent`, and future OPL-compatible repositories.
@@ -64,8 +65,9 @@ For OPL series, multi-repo cleanup, long-running autonomous work, or tasks that 
 ## How It Works
 
 - The agent reads the repository guidance, current docs, and live code or contract surfaces before editing.
-- The doctor gives a quick risk map without changing the target repository.
+- The doctor gives a quick risk map without changing the target repository; it is not the governance input or task list.
 - The skill treats ideal-state references as the user's maintained intent and derives current progress, open gaps, and the next-round agent prompt from live code, contracts, tests, CLI/read-models, and docs.
+- The agent reviews substantive document claims against live repo truth before editing, then rewrites content, merges duplicate responsibilities, and routes stale material.
 - If a repo lacks a stable active owner, the agent can use `templates/active-truth-plan.md` as the shape for the single Active Truth plan.
 - The skill routes each section by role and checks closeout so closed gaps, process packets, and stale wording do not stay in active paths.
 - The skill classifies docs as current truth, active plan, support reference, history, tombstone, or stale pollution.
@@ -115,7 +117,7 @@ Every long-lived developer document should have one job:
 | Historical process, retired plans, tombstones | `docs/history/` |
 | Machine truth | source, tests, contracts, CLI/API output, runtime ledger, receipt refs |
 
-The doctor is intentionally read-only and lightweight. It can identify structural risks, but it does not manage document meaning, declare a repository production-ready, or replace Codex reading code, tests, contracts, read models, or owner receipts.
+The doctor is intentionally read-only and lightweight. It can identify structural risks, but it does not manage document meaning, provide the governance task list, declare a repository production-ready, or replace Codex reading code, tests, contracts, read models, runtime ledgers, blockers, or owner receipts.
 
 ## Change Packets
 

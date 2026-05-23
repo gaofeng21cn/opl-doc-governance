@@ -10,6 +10,7 @@ Machine boundary: 本文是人读状态；当前行为以测试和 CLI 输出为
 - `skills/opl-doc-governance/SKILL.md`：Codex 使用入口。
 - `scripts/opl_doc_doctor.py doctor`：单仓文档生命周期只读诊断，并报告目标 repo 自己已有的 agent guidance、canonical docs、machine truth surface 和验证入口。
 - `scripts/opl_doc_doctor.py doctor`：保持轻量，只报告 missing canonical docs、lifecycle header、legacy active wording、长清单风险和 repo-native verification surface；Active Truth 语义判断由 Codex 按 skill 读取 live repo truth 后执行。
+- skill 现在明确禁止 doctor-driven 治理：doctor 只做预检风险地图；文档内容必须由 Codex 读取 source/contracts/tests/CLI-read-model/runtime ledger/receipt/blocker 和 docs 后逐段语义审计并重写。
 - `scripts/opl_doc_doctor.py family-plan`：OPL series 治理工作流生成，默认覆盖 `one-person-lab`、`med-autoscience`、`med-autogrant`、`redcube-ai`、`opl-meta-agent`，并可通过 `--repo ID=PATH` 扩展到其他 OPL-compatible repo。
 - `family-plan` 的完成门槛包含每个治理 repo 都要从 live repo truth 重写当前完成进度、现状与理想态差距、下一轮 Agent prompt。
 - `templates/active-truth-plan.md`：single Active Truth plan 推荐形状；用于缺少稳定 active owner 的 repo，不替代已有 canonical active plan，并要求下一轮 prompt 可直接作为 `/goal` 或长线 Codex prompt 使用。

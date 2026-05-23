@@ -61,6 +61,8 @@ python3 scripts/install_local_plugin.py
 
 doctor 的 JSON 会报告目标 repo 已有的 agent guidance、canonical docs、machine truth surface 和验证入口，并提示明显结构风险。文档内容是否符合 Active Truth / SSOT，由 Codex 按 skill 读取 ideal-state reference、active plan、live code/contracts/tests/read-model 后判断和修改。
 
+doctor 不能作为治理任务清单。正式治理必须先做 live truth 语义审计：逐段核对 active plan、核心文档和重要支撑文档中的实质 claim，读取 source、contracts、tests、CLI/read-model、runtime ledger、receipt 和 blocker 后，再决定更新、合并、归档、tombstone 或删除。
+
 ## Active Truth Plan 模板
 
 [active-truth-plan.md](../templates/active-truth-plan.md) 是 single Active Truth plan 的推荐形状。目标 repo 已经有 canonical active plan 时，不新增第二份计划文档；把模板中的 `Ideal-State Reference`、`Active Owner Discovery`、`Current Completion Progress`、`Current-State vs Ideal-State Gaps`、`Next-Round Agent Prompt` 和 `History / Tombstone Foldback` 映射进现有 owner 文档即可。下一轮 Agent prompt 必须能直接作为 `/goal` 或长线 Codex prompt 使用。

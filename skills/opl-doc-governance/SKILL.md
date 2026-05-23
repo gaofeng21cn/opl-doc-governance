@@ -20,13 +20,16 @@ Use this skill for developer-document governance: helping AI maintain the curren
    - `docs/invariants.md`
    - `docs/decisions.md`
    - `docs/active/current-state-vs-ideal-gap.md`
-4. Run the doctor when available:
+4. Locate the ideal-state reference and single Active Truth plan, then identify the live repo surfaces that can prove or disprove their claims.
+5. Optionally run the doctor as a preflight risk map:
 
 ```bash
 opl-doc-doctor doctor <repo-root> --format json
 ```
 
-Use doctor output as evidence, then verify important claims by reading files.
+Use doctor output only as a preflight risk map. It is never the governance input, never the task list, and never proof that docs are current. Important claims must be verified from live source, contracts, tests, CLI/read-model output, runtime ledgers, receipts, and the actual document text.
+
+For edit work, do not start by fixing doctor findings. Start by building the semantic input set: ideal state, current active truth plan, relevant canonical/support docs, implementation surfaces, verification/read-model surfaces, and stale/retired candidate docs.
 
 ## Goal Mode
 
@@ -73,6 +76,29 @@ Find the target repo's active truth owner before creating or rewriting any plan:
 Repo-native means the skill and CLI stay external while the agent works from the target repo's own surfaces: `AGENTS.md`, `TASTE.md`, `README*`, `docs/**`, contracts, source, tests, scripts, package metadata, and repo-local verification commands. Do not install this CLI or generate `.opl-doc-governance/` inside target repos.
 
 The local plugin installer creates the user-level `opl-doc-doctor` command. If it is unavailable, run the bundled script from this plugin checkout instead.
+
+## Live Truth Audit
+
+Document governance must start from current repository reality, not from doctor findings.
+
+For every governed repo, perform a semantic audit before editing:
+
+1. Read the ideal-state reference and active truth owner.
+2. Read the code, contracts, tests, package/scripts, CLI/read-model surfaces, ledgers, and receipts that can prove or disprove the active plan's claims.
+3. Run repo-native read commands when the docs mention runtime, readiness, App/workbench, generated surfaces, owner receipt, typed blocker, artifact, memory, lifecycle, source, or production evidence.
+4. Compare each active-plan claim and each relevant canonical-doc statement against the live truth just read.
+5. Review stale/retired candidate docs for content that must be merged, archived, tombstoned, or deleted.
+6. Rewrite docs from the comparison result, not from the doctor's structural findings.
+
+Minimum acceptable evidence:
+
+- Completion progress rows need source, contract, test, CLI/read-model, ledger, receipt, or explicit blocker refs.
+- Functional / structural gaps need a target-state reference plus the current implementation surface that still differs.
+- Test / evidence gaps need the existing implementation state plus the missing proof, receipt, or command.
+- Retired surfaces need no-active-caller, replacement owner, tombstone/provenance, or negative guard evidence.
+- Document merge/delete/archive decisions need the content role, destination owner, and live evidence that the old text is current support material, process history, retired provenance, or stale pollution.
+
+If you cannot find live evidence for a claim, write it as unknown, blocked, or evidence gap. Do not keep stale prose because it is already in a document.
 
 ## Lifecycle Model
 
@@ -132,10 +158,12 @@ Rewrite algorithm:
 
 1. Anchor the ideal state from the user-maintained target-state reference; do not derive the ideal from current implementation.
 2. Read live repo truth for each target area: source, contracts, tests, CLI/read-model output, runtime ledgers, and canonical docs.
-3. Classify each existing active-plan item as `done`, `open`, `blocked`, `evidence_gap`, `retired`, or `stale_pollution`.
-4. Replace the active plan with the best current truth: progress table, current gaps, and the next-round agent prompt. Do not preserve stale rows for chronology.
-5. Move only useful provenance into history/tombstone, especially no-resurrection guards for retired surfaces.
-6. Run repo-native verification and rewrite the plan again if verification changes the truth.
+3. Review the active truth plan, canonical docs, and stale/retired candidates section by section, comparing each substantive claim to live truth.
+4. Classify each existing active-plan item as `done`, `open`, `blocked`, `evidence_gap`, `retired`, or `stale_pollution`.
+5. Replace the active plan with the best current truth: progress table, current gaps, and the next-round agent prompt. Do not preserve stale rows for chronology.
+6. Update canonical/support docs so durable current truth has one owner and stale support content is merged, archived, tombstoned, or deleted.
+7. Move only useful provenance into history/tombstone, especially no-resurrection guards for retired surfaces.
+8. Run repo-native verification and rewrite the plan again if verification changes the truth.
 
 The next-round agent prompt must be executable as a `/goal` objective or long-running Codex prompt. It must name the write scope, non-goals, live truth inputs, required actions, verification commands, completion gate, and foldback target. Do not leave a bare TODO list as the baton.
 
@@ -145,6 +173,8 @@ OPL Doc Governance is Active Truth first. It is not primarily a history-manageme
 
 Hard rules:
 
+- Do not run doctor and then only fix doctor findings. That is a structural cleanup pass, not OPL Doc Governance.
+- Do not update docs from the existing prose alone. Every substantive current-state, progress, gap, retirement, and next-step claim must be checked against live repo truth or marked as an evidence gap.
 - Active docs are rewritten toward the best current truth; do not append execution diaries, dated closeout logs, or long historical checklists.
 - Each governed repo should have one active truth owner for current progress, current gaps, and the next-round agent prompt.
 - The next-round agent prompt must include write scope, non-goals, live truth inputs, verification commands, completion gate, and foldback target.
@@ -157,14 +187,16 @@ Hard rules:
 Use this when the user asks to refresh OPL series docs from ideal state and gap plans.
 
 1. Treat each governed repo's ideal-state reference and single Active Truth plan as primary references.
-2. Read current code/contracts/tests/read-model surfaces before editing docs.
-3. Rewrite the active plan so it states current completion progress, current-state-vs-ideal gaps, and a next-round agent prompt.
-4. Review other `docs/**/*.md` content section by section.
-5. Classify each section as current truth, active plan, support reference, process history, retired/tombstone, or stale pollution.
-6. Fold historical incremental lists into compact current-state tables plus history/tombstone pointers.
-7. Retire stale modules/interfaces/tests directly once active callers have moved; do not preserve compatibility aliases.
-8. Update canonical docs and archive/tombstone supporting docs so each document has one job.
-9. Run repo-native verification, absorb worktree lanes back to `main`, and clean temporary worktrees/branches.
+2. Run doctor only as preflight, then set it aside.
+3. Read current code/contracts/tests/read-model surfaces before editing docs.
+4. For each active plan, canonical doc, and stale/retired candidate, compare substantive claims against live repo truth section by section.
+5. Rewrite the active plan so it states current completion progress, current-state-vs-ideal gaps, and a next-round agent prompt.
+6. Review other `README*` and `docs/**/*.md` content section by section.
+7. Classify each section as current truth, active plan, support reference, process history, retired/tombstone, or stale pollution.
+8. Fold historical incremental lists into compact current-state tables plus history/tombstone pointers.
+9. Retire stale modules/interfaces/tests directly once active callers have moved; do not preserve compatibility aliases.
+10. Update canonical docs and archive/tombstone supporting docs so each document has one job.
+11. Run repo-native verification, absorb worktree lanes back to `main`, and clean temporary worktrees/branches.
 
 ## Change Packet
 

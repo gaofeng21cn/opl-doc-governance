@@ -193,6 +193,8 @@ def test_family_plan_json_contains_original_series_governance_prompt_elements() 
     assert {
         "evaluate_all_docs_item_by_item",
         "active_owner_discovery",
+        "live_truth_semantic_audit",
+        "doctor_is_preflight_only",
         "single_active_truth_first",
         "rewrite_active_truth",
         "active_truth_plan_shape",
@@ -207,6 +209,11 @@ def test_family_plan_json_contains_original_series_governance_prompt_elements() 
         "absorb_main_and_cleanup_when_complete",
     }.issubset(set(payload["governance_prompt_elements"]))
     assert "series_primary_reference_docs" in payload["governance_prompt_elements"]
+    assert any("preflight risk map" in step and "governance task list" in step for step in payload["workflow"])
+    assert any("semantic input set" in step for step in payload["workflow"])
+    assert any("source, contracts, tests" in step and "CLI/read-model" in step for step in payload["workflow"])
+    assert any("README*" in step and "docs/**/*.md" in step for step in payload["workflow"])
+    assert any("merge, archive, tombstone, or delete decision" in step for step in payload["workflow"])
     assert any("active truth owner" in step for step in payload["workflow"])
     assert any("Route sections by role" in step for step in payload["workflow"])
     assert any("Active Truth" in step for step in payload["workflow"])
@@ -231,6 +238,8 @@ def test_family_plan_markdown_contains_original_series_governance_prompt_element
     assert "10 primary reference docs" in markdown
     assert "single Active Truth plan" in markdown
     assert "active truth owner 发现顺序" in markdown
+    assert "live repo truth 语义审计" in markdown
+    assert "doctor 只做预检 guard" in markdown
     assert "唯一 Active Truth / SSOT 优先" in markdown
     assert "Active Truth plan 推荐形状" in markdown
     assert "按内容角色路由文档章节" in markdown
@@ -245,6 +254,10 @@ def test_family_plan_markdown_contains_original_series_governance_prompt_element
     assert "过时模块/接口/测试" in markdown
     assert "worktree/subagent" in markdown
     assert "吸收回 main 并清理" in markdown
+    assert "semantic input set" in markdown
+    assert "preflight risk map" in markdown
+    assert "README* and docs/**/*.md" in markdown
+    assert "merge, archive, tombstone, or delete decision" in markdown
 
 
 def test_parse_repo_overrides_keeps_default_series_and_adds_extra_repo() -> None:
