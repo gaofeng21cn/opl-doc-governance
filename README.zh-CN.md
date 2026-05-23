@@ -4,26 +4,43 @@
   <a href="./README.md">English</a> | <a href="./README.zh-CN.md"><strong>中文</strong></a>
 </p>
 
-<p align="center"><strong>面向 AI 长时间软件开发的文档生命周期治理工具</strong></p>
-<p align="center">一个 Codex skill 和只读 CLI doctor，用来让开发文档保持当前、分层清楚，并服务自主工程闭环。</p>
+<p align="center"><strong>面向 AI 长时间工程开发的 OPL-native 文档管家</strong></p>
+<p align="center">当 Codex 或其他代理需要理解目标并持续开发时，让仓库文档保持当前、分层清楚、可验证。</p>
 
-## 为什么需要它
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <strong>服务对象</strong><br/>
+      维护 OPL family 或 OPL-compatible 仓库的开发者与 AI operator
+    </td>
+    <td width="33%" valign="top">
+      <strong>组织什么</strong><br/>
+      当前事实、active plan、历史说明、tombstone 和验证证据
+    </td>
+    <td width="33%" valign="top">
+      <strong>如何开始</strong><br/>
+      直接让 Codex 使用 OPL Doc Governance 治理当前 repo 或 OPL series
+    </td>
+  </tr>
+</table>
 
-长时间 AI 开发最容易被过时文档拖垮：旧计划留在 active 路径，历史清单不断堆叠，已经退役的接口看起来还活着，代理每次都要重新判断互相矛盾的文档。
+## 为什么是 OPL Doc Governance
 
-OPL Doc Governance 把文档清理变成可重复执行的工作流。它帮助代理读取仓库当前事实，按生命周期角色逐份分类文档，清理过时内容，把历史折叠进 archive 或 tombstone，并通过验证完成工程闭环。
+AI 代理能否持续开发，取决于仓库是否清楚告诉它“现在什么是真的”。长时间工程推进后，旧计划会留在 active 文档里，历史清单越堆越长，已经退役的接口看起来仍然有效，下一位代理就要花大量上下文重新判断真实状态。
 
-它是 OPL-native 的治理工具。OpenArc、OpenSpec、Spec Kit、Agent OS 等项目是有用参考，但本仓不会把 OPL 系列项目迁移到外部固定文件布局。
+OPL Doc Governance 把这类清理工作变成可重复的文档管家流程。它帮助 Codex 读取当前仓库事实，区分 active plan 和历史材料，退役过时 surface，把过程内容折叠进 archive 或 tombstone，并用新鲜验证证据收口。
+
+目标很直接：用户只需要一句话说“治理文档”，代理就应该知道如何开始、什么时候创建 `/goal`、如何避免旧文档二次污染，以及如何完成工程闭环。
 
 ## 它提供什么
 
-- **Codex skill**：可复用的开发文档生命周期治理流程。
-- **自动 goal 模式**：遇到 OPL series、多仓、长周期或会修改文档的治理请求时，skill 要求代理先创建或延续 `/goal`。
-- **只读 doctor**：CLI 扫描 canonical docs、生命周期头、active 旧词和历史增量长清单风险。
+- **Codex 文档管家 skill**：给代理稳定的读取顺序、清理原则和 closeout 纪律。
+- **自动长线模式**：OPL series、多仓或重编辑治理会自动创建或延续 `/goal`，用户不用记长 prompt。
+- **只读 doctor**：CLI 报告缺失 canonical docs、缺失生命周期信号、active 旧词和历史增量长清单风险。
 - **OPL series 工作流**：为 `one-person-lab`、`med-autoscience`、`med-autogrant`、`redcube-ai`、`opl-meta-agent` 以及后续 OPL-compatible repo 生成治理计划。
-- **Change packet 模板**：为非平凡文档或工程变更提供短期 active 工作包。
+- **Change packet 模板**：为需要 intent、design、tasks、verification、foldback 的变更提供短期 active 工作包。
 
-## 快速开始
+## 一句话开始
 
 安装为本地 Codex plugin：
 
@@ -33,17 +50,21 @@ python3 scripts/install_local_plugin.py
 
 重启 Codex 后，一句话使用：
 
-```text
-使用 OPL Doc Governance 治理这个 repo 的开发文档生命周期。
-```
-
-治理完整 OPL series：
-
-```text
-使用 OPL Doc Governance 治理 OPL series 的开发文档生命周期。
-```
+- “使用 OPL Doc Governance 治理这个 repo 的开发文档生命周期。”
+- “使用 OPL Doc Governance 治理 OPL series 的开发文档生命周期。”
+- “使用 OPL Doc Governance 清理 stale active docs，并把已完成计划折回 history。”
 
 对于 OPL series、多仓清理、长周期自治、或提到 worktree/subagent/吸收回 `main` 的任务，skill 会主动进入或延续 `/goal`。短单仓只读审计先跑 doctor，不强制 goal。
+
+## 它如何工作
+
+- 代理先读取仓库协作规则、当前文档和 live code / contract surface，再开始编辑。
+- doctor 先给出风险地图，但不会修改目标仓库。
+- skill 将文档分类为当前事实、active plan、支撑参考、历史、tombstone 或 stale pollution。
+- active docs 只保留当前工作；过程材料进入 history 或 tombstone references。
+- 已完成工作折回 canonical docs，并用 repo-native 验证收口。
+
+OPL Doc Governance 是 OPL-native 的治理工具。OpenArc、OpenSpec、Spec Kit、Agent OS 等项目是有用参考，但本仓不会把 OPL 系列项目迁移到外部固定文件布局。
 
 ## CLI
 

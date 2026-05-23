@@ -4,26 +4,43 @@
   <a href="./README.md"><strong>English</strong></a> | <a href="./README.zh-CN.md">中文</a>
 </p>
 
-<p align="center"><strong>Document lifecycle governance for long-running AI software development</strong></p>
-<p align="center">A Codex skill and CLI doctor for keeping developer docs current, layered, and useful for autonomous engineering loops.</p>
+<p align="center"><strong>An OPL-native documentation steward for long-running AI engineering</strong></p>
+<p align="center">Keep repo docs current, layered, and useful when Codex or another agent needs to understand the goal and keep developing over time.</p>
 
-## Why This Exists
+<table>
+  <tr>
+    <td width="33%" valign="top">
+      <strong>Who It Serves</strong><br/>
+      Developers and AI operators maintaining OPL-family or OPL-compatible repositories
+    </td>
+    <td width="33%" valign="top">
+      <strong>What It Organizes</strong><br/>
+      Current truth, active plans, historical notes, tombstones, and verification evidence
+    </td>
+    <td width="33%" valign="top">
+      <strong>How To Start</strong><br/>
+      Ask Codex to use OPL Doc Governance for the repo or the OPL series
+    </td>
+  </tr>
+</table>
 
-Long-running AI development fails when documentation becomes a second, stale source of truth. Old plans remain active, historical checklists keep growing, retired interfaces look alive, and agents waste time reconciling contradictory docs.
+## Why OPL Doc Governance
 
-OPL Doc Governance turns document cleanup into a repeatable workflow. It helps an agent read the current repository truth, classify each document by lifecycle role, retire stale material, fold history into archives or tombstones, and close the loop with verification.
+AI agents can keep building only when the repository tells them what is true now. In long-running development, old plans stay in active docs, historical checklists keep growing, retired interfaces look alive, and the next agent has to spend context reconstructing the real state.
 
-It is OPL-native by design: OpenArc, OpenSpec, Spec Kit, Agent OS, and similar projects are useful references, but this repository does not migrate OPL-family projects into an external file layout.
+OPL Doc Governance turns that cleanup work into a repeatable steward workflow. It helps Codex read the current repository truth, separate active plans from history, retire stale surfaces, fold process material into archives or tombstones, and finish with fresh verification evidence.
+
+The goal is simple: a user should be able to ask for document governance in one sentence, and the agent should know how to start, when to create a `/goal`, how to avoid stale-doc pollution, and how to close the loop.
 
 ## What It Provides
 
-- **Codex skill**: a reusable workflow for developer-document lifecycle governance.
-- **Automatic goal mode**: for OPL series, multi-repo, long-running, or edit-heavy cleanup, the skill tells the agent to create or resume a `/goal` before execution.
-- **Read-only doctor**: a CLI scan that reports canonical doc presence, lifecycle headers, stale active wording, and long incremental-list risks.
-- **OPL series workflow**: a generated plan for `one-person-lab`, `med-autoscience`, `med-autogrant`, `redcube-ai`, `opl-meta-agent`, and future OPL-compatible repositories.
-- **Change packet templates**: a small active-work packet for non-trivial documentation or engineering changes.
+- **A Codex skill for document stewardship**: the agent gets a stable reading order, cleanup policy, and closeout discipline.
+- **Automatic long-horizon mode**: OPL series, multi-repo, or edit-heavy work creates or resumes a `/goal` without the user remembering a long prompt.
+- **A read-only doctor**: the CLI reports missing canonical docs, missing lifecycle signals, stale active wording, and long incremental-list risks.
+- **An OPL series workflow**: generated guidance for `one-person-lab`, `med-autoscience`, `med-autogrant`, `redcube-ai`, `opl-meta-agent`, and future OPL-compatible repositories.
+- **Change packet templates**: a compact active-work packet for changes that need intent, design, tasks, verification, and foldback.
 
-## Quick Start
+## One-Sentence Quick Start
 
 Install it as a local Codex plugin:
 
@@ -33,17 +50,21 @@ python3 scripts/install_local_plugin.py
 
 Restart Codex, then use one sentence:
 
-```text
-Use OPL Doc Governance to govern this repo's developer documentation lifecycle.
-```
-
-For the full OPL series:
-
-```text
-Use OPL Doc Governance to govern the OPL series developer documentation lifecycle.
-```
+- "Use OPL Doc Governance to govern this repo's developer documentation lifecycle."
+- "Use OPL Doc Governance to govern the OPL series developer documentation lifecycle."
+- "Use OPL Doc Governance to clean stale active docs and fold completed plans into history."
 
 For OPL series, multi-repo cleanup, long-running autonomous work, or tasks that mention worktrees, subagents, or absorbing back to `main`, the skill should create or resume a `/goal` automatically. Short single-repo read-only audits start with the doctor and do not force goal mode.
+
+## How It Works
+
+- The agent reads the repository guidance, current docs, and live code or contract surfaces before editing.
+- The doctor gives a quick risk map without changing the target repository.
+- The skill classifies docs as current truth, active plan, support reference, history, tombstone, or stale pollution.
+- Active docs stay focused on current work; historical process material moves to history or tombstone references.
+- Completed work folds back into canonical docs and ends with repo-native verification.
+
+OPL Doc Governance is OPL-native by design. OpenArc, OpenSpec, Spec Kit, Agent OS, and similar projects are useful references, but this repository does not migrate OPL-family projects into an external file layout.
 
 ## CLI
 
