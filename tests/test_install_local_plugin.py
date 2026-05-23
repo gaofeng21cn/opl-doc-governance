@@ -15,11 +15,20 @@ def test_install_copies_plugin_and_updates_marketplace(tmp_path: Path) -> None:
     (repo / ".git").mkdir()
     (repo / ".git" / "ignored").write_text("ignored\n")
 
-    result = install(repo, tmp_path / "plugins", tmp_path / "marketplace.json")
+    result = install(
+        repo,
+        tmp_path / "plugins",
+        tmp_path / "marketplace.json",
+        tmp_path / "bin",
+    )
 
     plugin_path = Path(result["plugin_path"])
+    command_path = Path(result["command_path"])
     assert (plugin_path / ".codex-plugin" / "plugin.json").exists()
     assert not (plugin_path / ".git").exists()
+    assert command_path.name == "opl-doc-doctor"
+    assert command_path.is_symlink()
+    assert command_path.resolve() == plugin_path / "scripts" / "opl_doc_doctor.py"
     marketplace = (tmp_path / "marketplace.json").read_text()
     assert "opl-doc-governance" in marketplace
     assert "Developer Tools" in marketplace

@@ -23,7 +23,7 @@ Use this skill for developer-document governance: helping AI understand current 
 4. Run the doctor when available:
 
 ```bash
-python3 scripts/opl_doc_doctor.py doctor <repo-root> --format json
+opl-doc-doctor doctor <repo-root> --format json
 ```
 
 Use doctor output as evidence, then verify important claims by reading files.
@@ -59,6 +59,8 @@ If the user asks how this differs from OpenArc/OpenSpec/Spec Kit, read `docs/ref
 ## Repo-Native Reading
 
 Repo-native means the skill and CLI stay external while the agent works from the target repo's own surfaces: `AGENTS.md`, `TASTE.md`, `README*`, `docs/**`, contracts, source, tests, scripts, package metadata, and repo-local verification commands. Do not install this CLI or generate `.opl-doc-governance/` inside target repos.
+
+The local plugin installer creates the user-level `opl-doc-doctor` command. If it is unavailable, run the bundled script from this plugin checkout instead.
 
 ## Lifecycle Model
 

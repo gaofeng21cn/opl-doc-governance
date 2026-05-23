@@ -30,19 +30,19 @@ Machine boundary: 本文是人读使用说明；可执行入口以 `skills/` 和
 生成可执行工作流：
 
 ```bash
-python3 scripts/opl_doc_doctor.py family-plan --format markdown
+opl-doc-doctor family-plan --format markdown
 ```
 
 机器可读 goal objective：
 
 ```bash
-python3 scripts/opl_doc_doctor.py family-plan --format json
+opl-doc-doctor family-plan --format json
 ```
 
 审计仓库：
 
 ```bash
-python3 scripts/opl_doc_doctor.py doctor /path/to/one-person-lab
+opl-doc-doctor doctor /path/to/one-person-lab
 ```
 
 安装为本地 Codex plugin：
@@ -50,6 +50,8 @@ python3 scripts/opl_doc_doctor.py doctor /path/to/one-person-lab
 ```bash
 python3 scripts/install_local_plugin.py
 ```
+
+安装脚本按 Codex personal plugin 标准复制到 `~/plugins/opl-doc-governance`，更新 `~/.agents/plugins/marketplace.json`，并在 `~/.local/bin` 下创建 `opl-doc-doctor` 命令。目标 repo 不需要安装本仓 CLI。
 
 然后重启 Codex，在任意 OPL series repo 里直接提：
 

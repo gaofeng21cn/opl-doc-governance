@@ -11,6 +11,7 @@ from typing import Any
 
 
 PLUGIN_NAME = "opl-doc-governance"
+COMMAND_NAME = "opl-doc-doctor"
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -27,7 +28,12 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def install(repo_root: Path, plugins_dir: Path, marketplace_path: Path) -> dict[str, str]:
+def install(
+    repo_root: Path,
+    plugins_dir: Path,
+    marketplace_path: Path,
+    bin_dir: Path,
+) -> dict[str, str]:
     target = plugins_dir / PLUGIN_NAME
     if target.exists():
         shutil.rmtree(target)
@@ -51,9 +57,16 @@ def install(repo_root: Path, plugins_dir: Path, marketplace_path: Path) -> dict[
     plugins.append(entry)
     write_json(marketplace_path, marketplace)
 
+    bin_dir.mkdir(parents=True, exist_ok=True)
+    command_path = bin_dir / COMMAND_NAME
+    if command_path.exists() or command_path.is_symlink():
+        command_path.unlink()
+    command_path.symlink_to(target / "scripts" / "opl_doc_doctor.py")
+
     return {
         "plugin_path": str(target),
         "marketplace_path": str(marketplace_path),
+        "command_path": str(command_path),
     }
 
 
@@ -65,6 +78,11 @@ def parse_args() -> argparse.Namespace:
         "--marketplace-path",
         default=str(Path.home() / ".agents" / "plugins" / "marketplace.json"),
     )
+    parser.add_argument(
+        "--bin-dir",
+        default=str(Path.home() / ".local" / "bin"),
+        help="User-level directory for the opl-doc-doctor command symlink.",
+    )
     return parser.parse_args()
 
 
@@ -74,6 +92,7 @@ def main() -> int:
         Path(args.repo_root).resolve(),
         Path(args.plugins_dir).expanduser().resolve(),
         Path(args.marketplace_path).expanduser().resolve(),
+        Path(args.bin_dir).expanduser().resolve(),
     )
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
@@ -81,4 +100,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

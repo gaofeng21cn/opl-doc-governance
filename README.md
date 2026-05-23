@@ -49,6 +49,8 @@ Install it as a local Codex plugin:
 python3 scripts/install_local_plugin.py
 ```
 
+This copies the plugin into `~/plugins/opl-doc-governance`, registers it in the personal marketplace, and creates a user-level `opl-doc-doctor` command under `~/.local/bin`. It does not write anything into the repos being governed.
+
 Restart Codex, then use one sentence:
 
 - "Use OPL Doc Governance to govern this repo's developer documentation lifecycle."
@@ -72,27 +74,27 @@ OPL Doc Governance is OPL-native by design. OpenArc, OpenSpec, Spec Kit, Agent O
 Run a read-only audit:
 
 ```bash
-python3 scripts/opl_doc_doctor.py doctor /path/to/repo
-python3 scripts/opl_doc_doctor.py doctor /path/to/repo --format json
+opl-doc-doctor doctor /path/to/repo
+opl-doc-doctor doctor /path/to/repo --format json
 ```
 
 Generate the OPL series workflow:
 
 ```bash
-python3 scripts/opl_doc_doctor.py family-plan --format markdown
-python3 scripts/opl_doc_doctor.py family-plan --format json
+opl-doc-doctor family-plan --format markdown
+opl-doc-doctor family-plan --format json
 ```
 
 Use local workspace paths when needed:
 
 ```bash
-python3 scripts/opl_doc_doctor.py family-plan --workspace-root /path/to/workspace --format json
+opl-doc-doctor family-plan --workspace-root /path/to/workspace --format json
 ```
 
 Override or add repositories:
 
 ```bash
-python3 scripts/opl_doc_doctor.py family-plan --repo award=award-agent --format markdown
+opl-doc-doctor family-plan --repo award=award-agent --format markdown
 ```
 
 ## Lifecycle Model
