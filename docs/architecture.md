@@ -26,6 +26,14 @@ Machine boundary: 本文是人读架构；可执行行为以 `scripts/opl_doc_do
 
 CLI 不承担 Active Truth 语义治理。doctor 只提示明显结构风险；真正的文档内容判断由 Codex 按 skill 读取 live repo truth、ideal-state reference、active plan 和 machine-readable evidence 后执行。
 
+## 文档组合审计
+
+正式治理的语义范围覆盖目标 repo 的 `README*` 与 `docs/**/*.md`。active truth owner 只承载当前完成进度、当前差距和下一轮 Agent prompt；其他文档按唯一任务分层：canonical current truth、public narrative、product/runtime/source/delivery support、policy/spec/reference、history 或 tombstone。
+
+治理流程逐段比较文档 claim 与 live repo truth。当前事实折回 canonical owner；active work 留在 single Active Truth plan；支撑材料进入对应 support 层；过程材料进入 history；退役 surface 进入 tombstone/provenance；没有当前角色的旧内容直接删除。历史增量长清单应折叠成当前状态表、剩余 gap 和 history pointer。
+
+过时模块、接口、测试、文档、workflow 和入口不通过兼容层延长寿命。只要 replacement 与 no-active-caller 证据成立，skill 指导代理直接退役并同步文档，不新增 alias、facade、wrapper 或旧路线复活叙述。
+
 ## 边界
 
 doctor 只读，不执行清理、不修改目标仓、不生成 owner receipt。skill 可以指导 Codex 修改目标仓文档，但必须先读取目标 repo 约束并运行对应验证。

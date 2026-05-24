@@ -1,6 +1,6 @@
 ---
 name: opl-doc-governance
-description: Use when governing OPL-family developer documentation lifecycle, auditing stale docs, folding active plans into canonical docs/history/tombstones, creating long-horizon change packets, or running the OPL docs doctor across one-person-lab, med-autoscience, med-autogrant, redcube-ai, opl-meta-agent, or adjacent OPL-compatible repositories.
+description: Use when governing OPL-family developer documentation lifecycle, auditing every README/docs claim against live repo truth, enforcing one-document-one-role taxonomy, folding active plans into canonical docs/history/tombstones, directly retiring stale modules/interfaces/tests/docs without compatibility surfaces, creating long-horizon change packets, or running the OPL docs doctor across one-person-lab, med-autoscience, med-autogrant, redcube-ai, opl-meta-agent, or adjacent OPL-compatible repositories.
 ---
 
 # OPL Doc Governance
@@ -13,6 +13,7 @@ Use this skill for developer-document governance: helping AI maintain the curren
 2. Read `TASTE.md` when present.
 3. Read canonical current docs before touching supporting docs:
    - `README.md`
+   - `README.*` when present
    - `docs/README.md`
    - `docs/project.md`
    - `docs/status.md`
@@ -21,7 +22,8 @@ Use this skill for developer-document governance: helping AI maintain the curren
    - `docs/decisions.md`
    - `docs/active/current-state-vs-ideal-gap.md`
 4. Locate the ideal-state reference and single Active Truth plan, then identify the live repo surfaces that can prove or disprove their claims.
-5. Optionally run the doctor as a preflight risk map:
+5. Inventory all `README*` and `docs/**/*.md` files before editing. The audit scope is not only the gap plan: every long-lived doc section must be checked for current role, current truth, and stale pollution risk.
+6. Optionally run the doctor as a preflight risk map:
 
 ```bash
 opl-doc-doctor doctor <repo-root> --format json
@@ -87,8 +89,9 @@ For every governed repo, perform a semantic audit before editing:
 2. Read the code, contracts, tests, package/scripts, CLI/read-model surfaces, ledgers, and receipts that can prove or disprove the active plan's claims.
 3. Run repo-native read commands when the docs mention runtime, readiness, App/workbench, generated surfaces, owner receipt, typed blocker, artifact, memory, lifecycle, source, or production evidence.
 4. Compare each active-plan claim and each relevant canonical-doc statement against the live truth just read.
-5. Review stale/retired candidate docs for content that must be merged, archived, tombstoned, or deleted.
-6. Rewrite docs from the comparison result, not from the doctor's structural findings.
+5. Review every `README*` and `docs/**/*.md` section that can influence engineering decisions. Classify each section before editing: current truth, active gap, support reference, process history, retired/tombstone, or stale pollution.
+6. Review stale/retired candidate docs for content that must be merged, archived, tombstoned, or deleted.
+7. Rewrite docs from the comparison result, not from the doctor's structural findings.
 
 Minimum acceptable evidence:
 
@@ -97,6 +100,7 @@ Minimum acceptable evidence:
 - Test / evidence gaps need the existing implementation state plus the missing proof, receipt, or command.
 - Retired surfaces need no-active-caller, replacement owner, tombstone/provenance, or negative guard evidence.
 - Document merge/delete/archive decisions need the content role, destination owner, and live evidence that the old text is current support material, process history, retired provenance, or stale pollution.
+- One-document-one-role decisions need the current document owner, the unique purpose it will retain, the duplicate or competing purpose to remove, and the destination for any useful content.
 
 If you cannot find live evidence for a claim, write it as unknown, blocked, or evidence gap. Do not keep stale prose because it is already in a document.
 
@@ -130,6 +134,21 @@ Route section content by role:
 | Retired surface | Tombstone/provenance in history |
 | Stale pollution | Rewrite, delete, or replace with a compact history pointer |
 
+## Whole-Docs Portfolio Audit
+
+Doc governance is a whole-portfolio semantic audit. It must not stop after fixing the active gap plan.
+
+For every `README*` and `docs/**/*.md` file:
+
+1. Identify the document's single job: current truth, active plan, support reference, policy/spec, public narrative, product/runtime/source/delivery support, history, or tombstone.
+2. Check each substantive section against live repo truth and the ideal-state reference.
+3. Remove competing roles from the document. Move useful content to the correct owner; delete stale content that no longer has a legitimate role.
+4. Fold historical incremental lists into compact current-state tables, current gaps, and history/tombstone pointers. Do not preserve chronology in active docs for its own sake.
+5. If a section describes an outdated module, interface, test, doc path, workflow, or entrypoint, prove whether active callers remain. Once replacement and no-active-caller evidence exists, retire it directly and do not add compatibility aliases, facades, wrappers, or "legacy still works" prose.
+6. Ensure the remaining document has one owner, one purpose, one state, and one machine boundary. If a document cannot be given one durable role, archive, tombstone, or delete it.
+
+The output should make the current unique truth obvious at first scan. Detailed reasoning belongs in evidence references, history, or tombstones, not in active current-truth docs.
+
 ## Autonomous Development Loop
 
 This skill must support the user's intended operating model: the user maintains the ideal state, while document governance derives and refreshes the development loop from live repo truth.
@@ -158,12 +177,13 @@ Rewrite algorithm:
 
 1. Anchor the ideal state from the user-maintained target-state reference; do not derive the ideal from current implementation.
 2. Read live repo truth for each target area: source, contracts, tests, CLI/read-model output, runtime ledgers, and canonical docs.
-3. Review the active truth plan, canonical docs, and stale/retired candidates section by section, comparing each substantive claim to live truth.
+3. Review the active truth plan, canonical docs, support docs, history/tombstone candidates, and stale/retired candidates section by section, comparing each substantive claim to live truth.
 4. Classify each existing active-plan item as `done`, `open`, `blocked`, `evidence_gap`, `retired`, or `stale_pollution`.
 5. Replace the active plan with the best current truth: progress table, current gaps, and the next-round agent prompt. Do not preserve stale rows for chronology.
 6. Update canonical/support docs so durable current truth has one owner and stale support content is merged, archived, tombstoned, or deleted.
-7. Move only useful provenance into history/tombstone, especially no-resurrection guards for retired surfaces.
-8. Run repo-native verification and rewrite the plan again if verification changes the truth.
+7. Rewrite or retire docs that carry multiple roles. A document should not simultaneously be current truth, active plan, execution log, and historical reference.
+8. Move only useful provenance into history/tombstone, especially no-resurrection guards for retired surfaces.
+9. Run repo-native verification and rewrite the plan again if verification changes the truth.
 
 The next-round agent prompt must be executable as a `/goal` objective or long-running Codex prompt. It must name the write scope, non-goals, live truth inputs, required actions, verification commands, completion gate, and foldback target. Do not leave a bare TODO list as the baton.
 
@@ -177,9 +197,10 @@ Hard rules:
 - Do not update docs from the existing prose alone. Every substantive current-state, progress, gap, retirement, and next-step claim must be checked against live repo truth or marked as an evidence gap.
 - Active docs are rewritten toward the best current truth; do not append execution diaries, dated closeout logs, or long historical checklists.
 - Each governed repo should have one active truth owner for current progress, current gaps, and the next-round agent prompt.
+- Each long-lived document should have one durable role. If two documents claim the same role, pick the canonical owner and rewrite, archive, tombstone, or delete the duplicate.
 - The next-round agent prompt is the user's intended autonomous-development baton, not a TODO list. It must include objective, write scope, non-goals, live truth inputs, required actions, verification commands, completion gate, and foldback target so it can be pasted into `/goal`.
 - Completed work must remove or rewrite the closed gap in the active truth plan; process trace moves to `docs/history/` or tombstone/provenance.
-- Before closeout, confirm closed gaps were removed or rewritten, canonical docs gained durable current truth, active paths contain no completed process packet, and the next-round prompt only names remaining work.
+- Before closeout, confirm closed gaps were removed or rewritten, canonical docs gained durable current truth, each edited doc has a single role, active paths contain no completed process packet, and the next-round prompt only names remaining work.
 - History exists to prevent semantic pollution of Active Truth, not to preserve every intermediate decision in active paths.
 
 ## OPL Series Lifecycle Workflow
@@ -189,12 +210,12 @@ Use this when the user asks to refresh OPL series docs from ideal state and gap 
 1. Treat each governed repo's ideal-state reference and single Active Truth plan as primary references.
 2. Run doctor only as preflight, then set it aside; use `active_truth_health` only to notice shape risks, not as semantic proof.
 3. Read current code/contracts/tests/read-model surfaces before editing docs.
-4. For each active plan, canonical doc, and stale/retired candidate, compare substantive claims against live repo truth section by section.
+4. For each active plan, canonical doc, support doc, history/tombstone candidate, and stale/retired candidate, compare substantive claims against live repo truth section by section.
 5. Rewrite the active plan so it states current completion progress, current-state-vs-ideal gaps, and a next-round agent prompt.
 6. Review other `README*` and `docs/**/*.md` content section by section.
 7. Classify each section as current truth, active plan, support reference, process history, retired/tombstone, or stale pollution.
 8. Fold historical incremental lists into compact current-state tables plus history/tombstone pointers.
-9. Retire stale modules/interfaces/tests directly once active callers have moved; do not preserve compatibility aliases.
+9. Retire stale modules/interfaces/tests/docs directly once active callers have moved; do not preserve compatibility aliases, facades, wrappers, or compatibility wording.
 10. Update canonical docs and archive/tombstone supporting docs so each document has one job.
 11. Run repo-native verification, absorb worktree lanes back to `main`, and clean temporary worktrees/branches.
 

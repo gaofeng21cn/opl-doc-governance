@@ -15,3 +15,6 @@ Machine boundary: 本文是人读硬约束；守门以测试和 review 执行。
 8. repo-native 指读取目标 repo 自己已有的开发入口，不指向目标 repo 安装本仓 CLI 或生成治理工具目录。
 9. OPL family 自动开发治理必须把 ideal-state reference 当输入，把当前完成进度、现状与理想态差距、下一轮 Agent prompt 当派生输出；不能让用户手工维护这些派生状态。
 10. active docs 不能保存执行日志、时间线、完成流水或长历史清单；这些内容只能压缩进入 history/tombstone，以免污染 Active Truth。
+11. 正式治理必须覆盖 `README*` 与 `docs/**/*.md` 的实质内容审计；不能只整理 active gap 文档或只修 doctor findings。
+12. 每份长期文档必须只有一个 owner、purpose、state 和 machine boundary；同一文档混合多个职责时必须拆分、迁移、归档、tombstone 或删除。
+13. 过时模块、接口、测试、文档、workflow 和入口在 replacement 与 no-active-caller 证据成立后直接退役；不新增 facade、wrapper、兼容 prose 或旧路线复活文案。

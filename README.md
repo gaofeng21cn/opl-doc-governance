@@ -28,7 +28,7 @@
 
 AI agents can keep building only when the repository tells them what is true now. In long-running development, old plans stay in active docs, historical checklists keep growing, retired interfaces look alive, and the next agent has to spend context reconstructing the real state.
 
-OPL Doc Governance turns that cleanup work into a repeatable steward workflow. It helps Codex read the current repository truth, rewrite active docs toward the single best Active Truth, retire stale surfaces, fold process material into archives or tombstones, and finish with fresh verification evidence.
+OPL Doc Governance turns that cleanup work into a repeatable steward workflow. It helps Codex read the current repository truth, audit every README and docs section against that truth, rewrite active docs toward the single best Active Truth, make each document keep one job, retire stale surfaces without compatibility prose, fold process material into archives or tombstones, and finish with fresh verification evidence.
 
 The goal is simple: a user should be able to ask for document governance in one sentence, and the agent should know how to start, when to create a `/goal`, how to avoid stale-doc pollution, and how to close the loop.
 
@@ -39,6 +39,7 @@ The goal is simple: a user should be able to ask for document governance in one 
 - **Automatic long-horizon mode**: OPL series, multi-repo, or edit-heavy work creates or resumes a `/goal` without the user remembering a long prompt.
 - **A read-only doctor**: the CLI reports missing canonical docs, missing lifecycle signals, stale active wording, and long incremental-list risks.
 - **A live-truth semantic audit loop**: Codex reads code, contracts, tests, read-models, ledgers, receipts, blockers, and docs section by section before rewriting prose.
+- **Whole-portfolio doc cleanup**: every `README*` and `docs/**/*.md` file is classified by role, checked against live truth, and rewritten, merged, archived, tombstoned, or deleted so one document does not carry several jobs.
 - **An autonomous development loop**: ideal state stays as the durable user input; governance refreshes current completion progress, current-state gaps, and the next-round agent prompt from live repo truth.
 - **An Active Truth plan template**: a recommended shape for the single active owner of progress, gaps, executable next-round prompts, routing decisions, and foldback targets.
 - **An OPL series workflow**: generated guidance for `one-person-lab`, `med-autoscience`, `med-autogrant`, `redcube-ai`, `opl-meta-agent`, and future OPL-compatible repositories.
@@ -68,10 +69,12 @@ For OPL series, multi-repo cleanup, long-running autonomous work, or tasks that 
 - The doctor gives a quick risk map without changing the target repository; it is not the governance input or task list.
 - The skill treats ideal-state references as the user's maintained intent and derives current progress, open gaps, and the next-round agent prompt from live code, contracts, tests, CLI/read-models, and docs.
 - The agent reviews substantive document claims against live repo truth before editing, then rewrites content, merges duplicate responsibilities, and routes stale material.
+- The agent audits the whole doc portfolio, not only the gap document: each long-lived document must retain one owner, one purpose, one state, and one machine boundary.
 - If a repo lacks a stable active owner, the agent can use `templates/active-truth-plan.md` as the shape for the single Active Truth plan.
 - The skill routes each section by role and checks closeout so closed gaps, process packets, and stale wording do not stay in active paths.
 - The skill classifies docs as current truth, active plan, support reference, history, tombstone, or stale pollution.
 - Active docs are rewritten to current truth; historical process material moves to history or tombstone references.
+- Outdated modules, interfaces, tests, docs, workflows, and entrypoints are retired directly after replacement and no-active-caller evidence exists; the governance output must not add compatibility aliases, facades, wrappers, or "legacy still works" prose.
 - Completed work folds back into canonical docs and ends with repo-native verification.
 
 OPL Doc Governance is OPL-native by design. OpenArc, OpenSpec, Spec Kit, Agent OS, and similar projects are useful references, but this repository does not migrate OPL-family projects into an external file layout.
@@ -106,7 +109,7 @@ opl-doc-doctor family-plan --repo award=award-agent --format markdown
 
 ## Lifecycle Model
 
-Every long-lived developer document should have one job:
+Every long-lived developer document should have one job. If a document mixes current truth, active plan, support reference, execution log, and history, governance picks the canonical owner for each role, moves useful content there, and archives, tombstones, or deletes the duplicate material.
 
 | Lifecycle role | Where it belongs |
 | --- | --- |

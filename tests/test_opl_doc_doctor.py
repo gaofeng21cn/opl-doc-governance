@@ -323,7 +323,7 @@ def test_family_plan_json_contains_original_series_governance_prompt_elements() 
     assert any("preflight risk map" in step and "governance task list" in step for step in payload["workflow"])
     assert any("semantic input set" in step for step in payload["workflow"])
     assert any("source, contracts, tests" in step and "CLI/read-model" in step for step in payload["workflow"])
-    assert any("README*" in step and "docs/**/*.md" in step for step in payload["workflow"])
+    assert any("every README*" in step and "docs/**/*.md" in step for step in payload["workflow"])
     assert any("merge, archive, tombstone, or delete decision" in step for step in payload["workflow"])
     assert any("active truth owner" in step for step in payload["workflow"])
     assert any("Route sections by role" in step for step in payload["workflow"])
@@ -358,16 +358,16 @@ def test_family_plan_markdown_contains_original_series_governance_prompt_element
     assert "下一轮 Agent prompt" in markdown
     assert "foldback closeout 闭环检查" in markdown
     assert "opl-meta-agent" in markdown
-    assert "逐条评估 docs 下其他所有文档" in markdown
+    assert "逐条评估 README/docs 下其他所有文档和章节" in markdown
     assert "清理和归档过时内容" in markdown
-    assert "每个文档必须有唯一任务和定位" in markdown
+    assert "每个长期文档必须有唯一任务和定位" in markdown
     assert "历史增量长清单要折叠" in markdown
-    assert "过时模块/接口/测试" in markdown
+    assert "过时模块/接口/测试/文档/workflow/入口" in markdown
     assert "worktree/subagent" in markdown
     assert "吸收回 main 并清理" in markdown
     assert "semantic input set" in markdown
     assert "preflight risk map" in markdown
-    assert "README* and docs/**/*.md" in markdown
+    assert "every README* and docs/**/*.md" in markdown
     assert "merge, archive, tombstone, or delete decision" in markdown
 
 
@@ -394,5 +394,7 @@ def test_family_plan_goal_prompt_is_self_contained_for_codex_goal() -> None:
     assert "single Active Truth plan" in goal_prompt
     assert "下一轮 Agent prompt" in goal_prompt
     assert "逐条评估" in goal_prompt
+    assert "其他所有文档和章节" in goal_prompt
+    assert "alias、facade 或 wrapper" in goal_prompt
     assert "吸收回 main" in goal_prompt
     assert "最终 main checkout" in goal_prompt

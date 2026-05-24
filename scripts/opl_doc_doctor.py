@@ -600,10 +600,10 @@ def build_goal_objective(repo_paths: dict[str, str]) -> str:
         "reference 和 single Active Truth plan 为主要参考，根据 live code、"
         "contracts、tests、CLI/read-model 与 docs 的当前事实，重写维护当前"
         "完成进度、现状与理想态差距、下一轮 Agent prompt；逐条评估 "
-        "README* 与 docs/**/*.md 下其他文档，清理归档过时内容，避免二次污染；"
-        "保证每个文档只有唯一任务和定位，active docs 不保存执行流水或历史"
-        "增量日志，过时模块/接口/测试按"
-        "理想态直接退役且不保留兼容面；可以并行使用 subagent/worktree，"
+        "README* 与 docs/**/*.md 下其他所有文档和章节，清理归档过时内容，避免二次污染；"
+        "保证每个长期文档只有唯一任务和定位，active docs 不保存执行流水或历史"
+        "增量日志，过时模块/接口/测试/文档/workflow/入口按"
+        "理想态直接退役且不保留兼容面、alias、facade 或 wrapper；可以并行使用 subagent/worktree，"
         "每条线完成后验证、提交、吸收回 main 并清理；最终 main checkout "
         "必须重新验证，且 canonical docs、history/tombstone 与必要的 "
         "contracts/read-model references 已同步。"
@@ -643,15 +643,15 @@ def family_plan(repo_paths: dict[str, str] | None = None) -> dict[str, Any]:
         "If a repo lacks a stable active truth owner, use templates/active-truth-plan.md as the section shape; if one already exists, map the same sections into that canonical active plan instead of creating a second plan.",
         "Active docs must keep current completion progress, current-state-vs-ideal gaps, and the next-round Agent prompt; do not append execution diaries, dated closeout logs, or historical checklists.",
         "Route sections by role: current truth to canonical docs, active gaps to the Active Truth plan, support material to references/specs/support layers, process history to docs/history, retired surfaces to tombstone/provenance, and stale pollution to rewrite/delete.",
-        "Review README* and docs/**/*.md section by section against live repo truth; update content because the code/contracts/tests/read-model changed or disproved prose, not because a structural scanner emitted a warning.",
+        "Review every README* and docs/**/*.md file section by section against live repo truth; update content because the code/contracts/tests/read-model changed or disproved prose, not because a structural scanner emitted a warning.",
         "For every merge, archive, tombstone, or delete decision, record the content role, destination owner, and evidence that the old text is current support material, process history, retired provenance, or stale pollution.",
         "The next-round Agent prompt must be executable as a /goal or long-running Codex prompt and include write scope, non-goals, live truth inputs, required actions, verification commands, completion gate, and foldback target.",
         "Before closeout, verify closed gaps were removed or rewritten, durable current truth was folded into canonical docs, active paths contain no completed process packet, and the next-round prompt only names remaining work.",
         "逐条评估 docs 下其他所有文档；classify each section as current truth, active gap, support reference, process history, retired/tombstone, or stale pollution.",
         "清理和归档过时内容，避免二次污染；route history to docs/history or tombstone refs instead of active docs.",
-        "每个文档必须有唯一任务和定位；update canonical docs so every long-lived document has one owner, one purpose, one state, and one machine boundary.",
+        "每个长期文档必须有唯一任务和定位；update canonical docs so every long-lived document has one owner, one purpose, one state, and one machine boundary.",
         "历史增量长清单要折叠 into compact current-state tables plus archive pointers.",
-        "过时模块/接口/测试全部按当前理想态直接退役清理，不保留兼容 alias、facade 或 compatibility wording.",
+        "过时模块/接口/测试/文档/workflow/入口全部按当前理想态直接退役清理，不保留兼容 alias、facade、wrapper 或 compatibility wording.",
         "可以并行开 worktree/subagent for independent repos or non-overlapping lanes; keep scopes explicit and merge evidence back to the owner lane.",
         "Run repo-native doc/contract/tests verification, absorb completed lanes back to main, and clean temporary branches/worktrees.",
     ]
@@ -675,7 +675,7 @@ def family_plan(repo_paths: dict[str, str] | None = None) -> dict[str, Any]:
             "stale process material is archived or tombstoned",
             "no active compatibility-resurrection wording remains",
             "contracts/tests/read-model references are not contradicted by prose",
-            "outdated modules/interfaces/tests are directly retired when their active callers have moved",
+            "outdated modules/interfaces/tests/docs/workflows/entrypoints are directly retired when their active callers have moved",
             "completed lanes were absorbed back to main and temporary worktrees/branches were cleaned",
             "verification was run on the final main checkout",
         ],
@@ -746,11 +746,11 @@ def print_family_markdown(payload: dict[str, Any]) -> None:
         "content_routing_table": "按内容角色路由文档章节",
         "next_round_agent_prompt": "下一轮 Agent prompt",
         "foldback_closure_check": "foldback closeout 闭环检查",
-        "evaluate_all_docs_item_by_item": "逐条评估 docs 下其他所有文档",
+        "evaluate_all_docs_item_by_item": "逐条评估 README/docs 下其他所有文档和章节",
         "cleanup_and_archive_stale_content": "清理和归档过时内容",
-        "unique_task_positioning": "每个文档必须有唯一任务和定位",
+        "unique_task_positioning": "每个长期文档必须有唯一任务和定位",
         "fold_long_incremental_lists": "历史增量长清单要折叠",
-        "directly_retire_outdated_modules_interfaces_tests": "过时模块/接口/测试直接退役清理",
+        "directly_retire_outdated_modules_interfaces_tests": "过时模块/接口/测试/文档/workflow/入口直接退役清理",
         "allow_parallel_worktrees_and_subagents": "允许并行 worktree/subagent",
         "absorb_main_and_cleanup_when_complete": "完成后吸收回 main 并清理",
     }
