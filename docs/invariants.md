@@ -18,3 +18,5 @@ Machine boundary: 本文是人读硬约束；守门以测试和 review 执行。
 11. 正式治理必须覆盖 `README*` 与 `docs/**/*.md` 的实质内容审计；不能只整理 active gap 文档或只修 doctor findings。
 12. 每份长期文档必须只有一个 owner、purpose、state 和 machine boundary；同一文档混合多个职责时必须拆分、迁移、归档、tombstone 或删除。
 13. 过时模块、接口、测试、文档、workflow 和入口在 replacement 与 no-active-caller 证据成立后直接退役；不新增 facade、wrapper、兼容 prose 或旧路线复活文案。
+14. 默认 OPL series 治理范围是 6 个 repo 和 12 个主参考文档；除非用户显式缩小范围，不得退回旧的 5 仓/10 文档范围。
+15. 长线治理必须区分本轮 tranche closeout 与全局 `/goal` 完成；coverage ledger 仍有未覆盖文档、未折回 stale/retire 候选或未完成 gap 时，不得把全局目标标记 complete。

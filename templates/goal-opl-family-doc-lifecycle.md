@@ -1,10 +1,10 @@
 # OPL Series Docs Lifecycle Goal
 
-使用 OPL Doc Governance，在 `one-person-lab`、`med-autoscience`、`med-autogrant`、`redcube-ai`、`opl-meta-agent` 及后续纳入的 OPL-compatible repo 执行文档生命周期治理。
+使用 OPL Doc Governance，在 `one-person-lab`、`med-autoscience`、`med-autogrant`、`redcube-ai`、`opl-meta-agent`、`one-person-lab-app` 及后续纳入的 OPL-compatible repo 执行文档生命周期治理。
 
 执行代理应自动创建或延续 `/goal`，用户只需要说“使用 OPL Doc Governance 治理 OPL series 的开发文档生命周期”。
 
-以 OPL series 各 repo 的理想情况和 single Active Truth plan 为主要参考，根据现在各个 repo 代码、contracts、tests、CLI/read-model 和 docs 的实际情况，重写刷新各 repo 的当前完成进度、现状与理想态差距、下一轮 Agent prompt，并逐条评估各个 repo `README*` 与 `docs/**/*.md` 下其他所有文档。
+默认 OPL series 范围是 6 个 repo；以各 repo 的理想情况和 single Active Truth plan 合计 12 个主参考文档为主要参考，根据现在各个 repo 代码、contracts、tests、CLI/read-model 和 docs 的实际情况，重写刷新各 repo 的当前完成进度、现状与理想态差距、下一轮 Agent prompt，并逐条评估各个 repo `README*` 与 `docs/**/*.md` 下其他所有文档。
 
 目标：
 
@@ -17,6 +17,7 @@
 - 对已经过时的模块、接口、测试和文档入口，按理想态直接退役清理，不保留兼容面、alias、facade 或 wrapper。
 - 明确区分功能/结构差距与测试/证据差距；不能把 evidence tail 写成“功能未实现”，也不能把文档整齐写成 production ready。
 - 保持 OPL-native taxonomy，不迁移到 OpenArc、OpenSpec、Spec Kit 或其他外部文件框架。
+- 按 long-horizon tranche 续跑；本轮完成只表示本轮 verified / absorbed，不等于全局 `/goal` 完成。
 
 工作方式：
 
@@ -34,6 +35,8 @@
 - closeout 前检查：closed gap 已删除或重写、当前事实已折回 canonical docs、active path 不保留完成过程包、下一轮 prompt 只保留仍未完成的工作。
 - 可以用 subagent 并行开多个 worktree 推进，但每条线必须有清晰 write scope。
 - 每条线完成后跑新鲜验证，提交，吸收回 `main`，删除对应 worktree/branch。
+- 每个 repo 维护 coverage ledger：已审文档/章节、已改文档、归档/tombstone/删除文档、未覆盖文档、剩余 stale/retire 候选和下一轮写入范围。
+- 未覆盖文档清单、剩余 stale/retire 候选或未完成 gap 非空时，只能做 tranche closeout，并把剩余项折进下一轮 Agent prompt；不得把全局 `/goal` 标记 complete。
 - 最终在 `main` 上再次验证，并更新 canonical docs、history/tombstone 和必要的 contracts/read-model references。
 
 完成口径：
@@ -45,3 +48,4 @@
 - prose 文档不与 contracts、tests、CLI/read-model 矛盾。
 - 没有新增兼容污染面或旧路线复活文案。
 - 最终 main checkout 验证通过，且临时 worktree/branch 已清理。
+- 全局完成还要求 6 个 repo 的 `README*` 与 `docs/**/*.md` 已逐段覆盖，coverage ledger 没有未覆盖文档或未折回的 stale/retire 候选。

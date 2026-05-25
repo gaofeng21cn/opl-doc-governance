@@ -31,7 +31,7 @@ Machine boundary: 本文说明设计；行为真相以 `skills/opl-doc-governanc
 
 ## 完成口径
 
-一个治理轮次完成时，必须满足：
+一个治理 tranche closeout 时，必须满足：
 
 - canonical docs 只表达当前事实。
 - active docs 只保留当前完成进度、当前差距和下一轮 Agent prompt。
@@ -40,3 +40,5 @@ Machine boundary: 本文说明设计；行为真相以 `skills/opl-doc-governanc
 - history/tombstone 承接过程和退役语义。
 - contracts/tests/read-model 不被 prose 文档矛盾。
 - 最终 main checkout 上有新鲜验证。
+
+全局 OPL series `/goal` 完成还必须满足默认 6 个 repo 的 12 个主参考文档已用于校准，且 coverage ledger 证明所有 `README*` 与 `docs/**/*.md` 已逐段覆盖，没有未覆盖文档、未折回 stale/retire 候选或未进入下一轮 Agent prompt 的剩余 gap。否则只能报告本轮 tranche 完成，并继续保留全局 goal。

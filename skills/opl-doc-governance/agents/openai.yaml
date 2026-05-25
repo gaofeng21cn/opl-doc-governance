@@ -6,9 +6,12 @@ interface:
     /Users/gaofeng/workspace/opl-doc-governance/skills/opl-doc-governance/SKILL.md
     to govern this repo's developer documentation lifecycle, audit README/docs
     against live truth, and create or resume a /goal for OPL series or
-    long-running cleanup. If the current session skill index does not list
-    OPL Doc Governance or opl-doc-governance, do not treat that as the skill
-    being unavailable; read the SKILL.md path above directly and follow its
-    Goal Mode instructions.
+    long-running cleanup. For OPL series governance, use the six-repo default
+    including one-person-lab-app, the 12 primary reference documents, and
+    long-horizon tranche continuation rules from Goal Mode; do not mark the
+    global goal complete just because one verified tranche was absorbed. If the
+    current session skill index does not list OPL Doc Governance or
+    opl-doc-governance, do not treat that as the skill being unavailable; read
+    the SKILL.md path above directly and follow its Goal Mode instructions.
 policy:
   allow_implicit_invocation: true

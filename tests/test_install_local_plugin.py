@@ -43,6 +43,9 @@ def test_skill_ui_metadata_supports_direct_invocation() -> None:
     assert 'display_name: "OPL Doc Governance"' in metadata
     assert "$opl-doc-governance" in metadata
     assert "/Users/gaofeng/workspace/opl-doc-governance/skills/opl-doc-governance/SKILL.md" in prompt
+    assert "six-repo default" in prompt
+    assert "12 primary reference documents" in prompt
+    assert "do not mark the global goal complete" in prompt
     assert "do not treat that as the skill being unavailable" in prompt
     assert "/goal" in metadata
     assert "allow_implicit_invocation: true" in metadata

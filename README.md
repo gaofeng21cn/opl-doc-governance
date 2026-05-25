@@ -42,7 +42,7 @@ The goal is simple: a user should be able to ask for document governance in one 
 - **Whole-portfolio doc cleanup**: every `README*` and `docs/**/*.md` file is classified by role, checked against live truth, and rewritten, merged, archived, tombstoned, or deleted so one document does not carry several jobs.
 - **An autonomous development loop**: ideal state stays as the durable user input; governance refreshes current completion progress, current-state gaps, and the next-round agent prompt from live repo truth.
 - **An Active Truth plan template**: a recommended shape for the single active owner of progress, gaps, executable next-round prompts, routing decisions, and foldback targets.
-- **An OPL series workflow**: generated guidance for `one-person-lab`, `med-autoscience`, `med-autogrant`, `redcube-ai`, `opl-meta-agent`, and future OPL-compatible repositories.
+- **An OPL series workflow**: generated guidance for `one-person-lab`, `med-autoscience`, `med-autogrant`, `redcube-ai`, `opl-meta-agent`, `one-person-lab-app`, and future OPL-compatible repositories.
 - **Change packet templates**: a compact active-work packet for changes that need intent, design, tasks, verification, and foldback.
 
 ## One-Sentence Quick Start
@@ -61,7 +61,7 @@ Restart Codex, then use one sentence:
 - "Use OPL Doc Governance to govern the OPL series developer documentation lifecycle."
 - "Use OPL Doc Governance to clean stale active docs and fold completed plans into history."
 
-For OPL series, multi-repo cleanup, long-running autonomous work, or tasks that mention worktrees, subagents, or absorbing back to `main`, the skill should create or resume a `/goal` automatically. Short single-repo read-only audits start with the doctor and do not force goal mode.
+For OPL series, multi-repo cleanup, long-running autonomous work, or tasks that mention worktrees, subagents, or absorbing back to `main`, the skill should create or resume a `/goal` automatically. The default OPL series is six repos and 12 primary reference documents. Short single-repo read-only audits start with the doctor and do not force goal mode.
 
 ## How It Works
 
@@ -75,6 +75,7 @@ For OPL series, multi-repo cleanup, long-running autonomous work, or tasks that 
 - The skill classifies docs as current truth, active plan, support reference, history, tombstone, or stale pollution.
 - Active docs are rewritten to current truth; historical process material moves to history or tombstone references.
 - Outdated modules, interfaces, tests, docs, workflows, and entrypoints are retired directly after replacement and no-active-caller evidence exists; the governance output must not add compatibility aliases, facades, wrappers, or "legacy still works" prose.
+- OPL series governance runs as long-horizon tranches. A verified and absorbed lane is only a tranche closeout; the global `/goal` stays open while the coverage ledger still has unreviewed docs, unresolved stale/retire candidates, or carry-forward gaps.
 - Completed work folds back into canonical docs and ends with repo-native verification.
 
 OPL Doc Governance is OPL-native by design. OpenArc, OpenSpec, Spec Kit, Agent OS, and similar projects are useful references, but this repository does not migrate OPL-family projects into an external file layout.

@@ -287,20 +287,23 @@ def test_doctor_flags_process_log_headings_in_active_truth_owner(tmp_path: Path)
 def test_family_plan_contains_opl_series_workflow() -> None:
     payload = family_plan()
 
-    assert set(payload["repos"]) == {"opl", "mas", "mag", "rca", "oma"}
+    assert set(payload["repos"]) == {"opl", "mas", "mag", "rca", "oma", "app"}
     assert payload["repos"]["oma"] == "opl-meta-agent"
-    assert payload["primary_reference_doc_count"] == 10
+    assert payload["repos"]["app"] == "one-person-lab-app"
+    assert payload["primary_reference_doc_count"] == 12
     assert "OPL single Active Truth plan" in payload["primary_reference_docs_per_repo"]
+    assert "APP single Active Truth plan" in payload["primary_reference_docs_per_repo"]
     assert payload["goal_mode"]["recommended"] is True
     assert "create_goal" in payload["goal_mode"]["agent_action"]
     assert any("archive" in step or "tombstone" in step for step in payload["workflow"])
     assert "verification was run on the final main checkout" in payload["completion_gate"]
+    assert "global goal was not marked complete merely because one tranche finished" in payload["completion_gate"]
 
 
 def test_family_plan_json_contains_original_series_governance_prompt_elements() -> None:
     payload = family_plan()
 
-    assert len(payload["primary_reference_docs_per_repo"]) == 10
+    assert len(payload["primary_reference_docs_per_repo"]) == 12
     assert {
         "evaluate_all_docs_item_by_item",
         "active_owner_discovery",
@@ -318,6 +321,8 @@ def test_family_plan_json_contains_original_series_governance_prompt_elements() 
         "directly_retire_outdated_modules_interfaces_tests",
         "allow_parallel_worktrees_and_subagents",
         "absorb_main_and_cleanup_when_complete",
+        "long_horizon_tranche_continuation",
+        "coverage_ledger_for_unfinished_docs",
     }.issubset(set(payload["governance_prompt_elements"]))
     assert "series_primary_reference_docs" in payload["governance_prompt_elements"]
     assert any("preflight risk map" in step and "governance task list" in step for step in payload["workflow"])
@@ -333,6 +338,8 @@ def test_family_plan_json_contains_original_series_governance_prompt_elements() 
     assert any("Before closeout" in step for step in payload["workflow"])
     assert any("docs 下其他所有文档" in step for step in payload["workflow"])
     assert any("worktree" in step and "subagent" in step for step in payload["workflow"])
+    assert any("tranche" in step and "global goal" in step for step in payload["workflow"])
+    assert any("coverage ledger" in step and "unreviewed" in step for step in payload["workflow"])
 
 
 def test_family_plan_markdown_contains_original_series_governance_prompt_elements() -> None:
@@ -346,7 +353,7 @@ def test_family_plan_markdown_contains_original_series_governance_prompt_element
     assert "OPL Series Docs Lifecycle Workflow" in markdown
     assert "Goal Mode" in markdown
     assert "create or resume a /goal" in markdown
-    assert "10 primary reference docs" in markdown
+    assert "12 primary reference docs" in markdown
     assert "single Active Truth plan" in markdown
     assert "active truth owner 发现顺序" in markdown
     assert "live repo truth 语义审计" in markdown
@@ -369,12 +376,14 @@ def test_family_plan_markdown_contains_original_series_governance_prompt_element
     assert "preflight risk map" in markdown
     assert "every README* and docs/**/*.md" in markdown
     assert "merge, archive, tombstone, or delete decision" in markdown
+    assert "tranche" in markdown
+    assert "coverage ledger" in markdown
 
 
 def test_parse_repo_overrides_keeps_default_series_and_adds_extra_repo() -> None:
     repos = parse_repo_overrides(["award=award-agent"])
 
-    assert set(repos) == {"opl", "mas", "mag", "rca", "oma", "award"}
+    assert set(repos) == {"opl", "mas", "mag", "rca", "oma", "app", "award"}
     assert repos["award"] == "award-agent"
 
 
@@ -383,6 +392,7 @@ def test_default_series_repos_can_expand_from_workspace_root() -> None:
 
     assert repos["opl"] == "/workspace/one-person-lab"
     assert repos["oma"] == "/workspace/opl-meta-agent"
+    assert repos["app"] == "/workspace/one-person-lab-app"
 
 
 def test_family_plan_goal_prompt_is_self_contained_for_codex_goal() -> None:
@@ -395,6 +405,10 @@ def test_family_plan_goal_prompt_is_self_contained_for_codex_goal() -> None:
     assert "下一轮 Agent prompt" in goal_prompt
     assert "逐条评估" in goal_prompt
     assert "其他所有文档和章节" in goal_prompt
+    assert "6 个 repo" in goal_prompt
+    assert "12 个主参考文档" in goal_prompt
+    assert "本轮 tranche" in goal_prompt
+    assert "未覆盖文档" in goal_prompt
     assert "alias、facade 或 wrapper" in goal_prompt
     assert "吸收回 main" in goal_prompt
     assert "最终 main checkout" in goal_prompt

@@ -1,6 +1,6 @@
 ---
 name: opl-doc-governance
-description: Use when governing OPL-family developer documentation lifecycle, auditing every README/docs claim against live repo truth, enforcing one-document-one-role taxonomy, folding active plans into canonical docs/history/tombstones, directly retiring stale modules/interfaces/tests/docs without compatibility surfaces, creating long-horizon change packets, or running the OPL docs doctor across one-person-lab, med-autoscience, med-autogrant, redcube-ai, opl-meta-agent, or adjacent OPL-compatible repositories.
+description: Use when governing OPL-family developer documentation lifecycle, auditing every README/docs claim against live repo truth, enforcing one-document-one-role taxonomy, folding active plans into canonical docs/history/tombstones, directly retiring stale modules/interfaces/tests/docs without compatibility surfaces, creating long-horizon change packets, or running the OPL docs doctor across one-person-lab, med-autoscience, med-autogrant, redcube-ai, opl-meta-agent, one-person-lab-app, or adjacent OPL-compatible repositories.
 ---
 
 # OPL Doc Governance
@@ -37,10 +37,12 @@ For edit work, do not start by fixing doctor findings. Start by building the sem
 
 When the user asks for OPL series governance, multi-repo cleanup, long-running autonomous development, stale-doc cleanup with edits, or anything that mentions worktrees/subagents/absorbing back to `main`, create or resume a `/goal` before execution. The user should not have to remember to ask for `/goal`.
 
+The default OPL series scope is six repos: `one-person-lab`, `med-autoscience`, `med-autogrant`, `redcube-ai`, `opl-meta-agent`, and `one-person-lab-app`. Their ideal-state references plus single Active Truth plans form 12 primary reference documents. Do not shrink this to the older five-repo set unless the user explicitly excludes the App repo.
+
 Use this objective shape:
 
 ```text
-使用 OPL Doc Governance，自动创建或延续 /goal，治理 OPL series 的开发文档生命周期；以各 repo 的 ideal-state reference 和 single Active Truth plan 为主要参考，根据 live code、contracts、tests、CLI/read-model 与 docs 的当前事实，重写维护当前完成进度、现状与理想态差距、下一轮 Agent prompt；逐条评估 README* 与 docs/**/*.md 下其他文档，清理归档过时内容，避免二次污染；保证每个文档只有唯一任务和定位，active docs 不保存执行流水或历史增量日志，过时模块/接口/测试按理想态直接退役且不保留兼容面；可以并行使用 subagent/worktree，每条线完成后验证、提交、吸收回 main 并清理；最终 main checkout 必须重新验证。
+使用 OPL Doc Governance，自动创建或延续 /goal，治理 OPL series 6 个 repo 的开发文档生命周期；以各 repo 的 ideal-state reference 和 single Active Truth plan 合计 12 个主参考文档为主要参考，根据 live code、contracts、tests、CLI/read-model 与 docs 的当前事实，重写维护当前完成进度、现状与理想态差距、下一轮 Agent prompt；逐条评估 README* 与 docs/**/*.md 下其他所有文档和章节，清理归档过时内容，避免二次污染；保证每个文档只有唯一任务和定位，active docs 不保存执行流水或历史增量日志，过时模块/接口/测试/文档/workflow/入口按理想态直接退役且不保留兼容面、alias、facade 或 wrapper；可以并行使用 subagent/worktree，每条线完成后验证、提交、吸收回 main 并清理；本轮 tranche 完成只表示本轮已验证并折回，不得把全局 /goal 标记 complete，除非 6 个 repo 的 README* 与 docs/**/*.md 已逐段覆盖、未覆盖文档清单为空、未完成 gap 已转入下一轮 Agent prompt；每轮结束必须留下覆盖清单、未覆盖文档、剩余 stale/retire 候选和下一轮写入范围；最终 main checkout 必须重新验证。
 ```
 
 For a short single-repo read-only audit, run doctor first and do not force `/goal` unless the user asks for cleanup or long-running execution.
@@ -149,6 +151,8 @@ For every `README*` and `docs/**/*.md` file:
 
 The output should make the current unique truth obvious at first scan. Detailed reasoning belongs in evidence references, history, or tombstones, not in active current-truth docs.
 
+For long-horizon OPL series work, maintain a coverage ledger for each repo: reviewed docs/sections, edited docs, archived/tombstoned/deleted docs, unreviewed docs, unresolved stale/retire candidates, and next tranche write scope. A verified tranche can be absorbed back to `main`, but it does not close the global `/goal` while the coverage ledger still has unreviewed docs or unresolved carry-forward items.
+
 ## Autonomous Development Loop
 
 This skill must support the user's intended operating model: the user maintains the ideal state, while document governance derives and refreshes the development loop from live repo truth.
@@ -201,23 +205,28 @@ Hard rules:
 - The next-round agent prompt is the user's intended autonomous-development baton, not a TODO list. It must include objective, write scope, non-goals, live truth inputs, required actions, verification commands, completion gate, and foldback target so it can be pasted into `/goal`.
 - Completed work must remove or rewrite the closed gap in the active truth plan; process trace moves to `docs/history/` or tombstone/provenance.
 - Before closeout, confirm closed gaps were removed or rewritten, canonical docs gained durable current truth, each edited doc has a single role, active paths contain no completed process packet, and the next-round prompt only names remaining work.
+- Do not mark the global `/goal` complete merely because one tranche was verified, committed, and absorbed. Call it a tranche closeout, keep the global goal active, and carry remaining docs/gaps into the next-round Agent prompt.
+- Every multi-repo tranche must leave a coverage ledger that names reviewed docs, unreviewed docs, unresolved stale/retire candidates, and the next write scope. If that ledger is missing, the tranche is not complete.
 - History exists to prevent semantic pollution of Active Truth, not to preserve every intermediate decision in active paths.
 
 ## OPL Series Lifecycle Workflow
 
 Use this when the user asks to refresh OPL series docs from ideal state and gap plans.
 
-1. Treat each governed repo's ideal-state reference and single Active Truth plan as primary references.
-2. Run doctor only as preflight, then set it aside; use `active_truth_health` only to notice shape risks, not as semantic proof.
-3. Read current code/contracts/tests/read-model surfaces before editing docs.
-4. For each active plan, canonical doc, support doc, history/tombstone candidate, and stale/retired candidate, compare substantive claims against live repo truth section by section.
-5. Rewrite the active plan so it states current completion progress, current-state-vs-ideal gaps, and a next-round agent prompt.
-6. Review other `README*` and `docs/**/*.md` content section by section.
-7. Classify each section as current truth, active plan, support reference, process history, retired/tombstone, or stale pollution.
-8. Fold historical incremental lists into compact current-state tables plus history/tombstone pointers.
-9. Retire stale modules/interfaces/tests/docs directly once active callers have moved; do not preserve compatibility aliases, facades, wrappers, or compatibility wording.
-10. Update canonical docs and archive/tombstone supporting docs so each document has one job.
-11. Run repo-native verification, absorb worktree lanes back to `main`, and clean temporary worktrees/branches.
+1. Treat the default six repos as the governed OPL series unless the user narrows scope: `one-person-lab`, `med-autoscience`, `med-autogrant`, `redcube-ai`, `opl-meta-agent`, and `one-person-lab-app`.
+2. Treat each governed repo's ideal-state reference and single Active Truth plan as primary references; the default six-repo run has 12 primary reference documents.
+3. Run doctor only as preflight, then set it aside; use `active_truth_health` only to notice shape risks, not as semantic proof.
+4. Read current code/contracts/tests/read-model surfaces before editing docs.
+5. For each active plan, canonical doc, support doc, history/tombstone candidate, and stale/retired candidate, compare substantive claims against live repo truth section by section.
+6. Rewrite the active plan so it states current completion progress, current-state-vs-ideal gaps, and a next-round agent prompt.
+7. Review other `README*` and `docs/**/*.md` content section by section.
+8. Classify each section as current truth, active plan, support reference, process history, retired/tombstone, or stale pollution.
+9. Fold historical incremental lists into compact current-state tables plus history/tombstone pointers.
+10. Retire stale modules/interfaces/tests/docs directly once active callers have moved; do not preserve compatibility aliases, facades, wrappers, or compatibility wording.
+11. Update canonical docs and archive/tombstone supporting docs so each document has one job.
+12. Maintain a repo-by-repo coverage ledger for reviewed docs, edited docs, retired docs, unreviewed docs, unresolved stale/retire candidates, and next tranche write scope.
+13. Run repo-native verification, absorb completed worktree lanes back to `main`, and clean only the current tranche's temporary worktrees/branches.
+14. Close the tranche, not the global goal, unless the coverage ledger proves no unreviewed docs, unresolved stale/retire candidates, or unfinished gaps remain across all governed repos.
 
 ## Change Packet
 
@@ -241,3 +250,4 @@ Templates live under `templates/change-packet/`.
 - Do not put runtime truth, domain truth, quality verdicts, artifact authority, or owner receipts in docs.
 - Do not keep compatibility aliases or facade docs after retirement gates are met.
 - Do not create a second changelog/memory system when the repo already has history/process and receipt ledgers.
+- Do not convert a verified tranche into global completion while any governed repo still has unreviewed docs, unresolved stale/retire candidates, or carry-forward gaps.
