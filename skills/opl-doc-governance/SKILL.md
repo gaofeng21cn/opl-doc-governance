@@ -11,7 +11,7 @@ Use this skill for developer-document governance: helping AI maintain the curren
 
 1. Read the target repo's `AGENTS.md`.
 2. Read `TASTE.md` when present.
-3. Read canonical current docs before touching supporting docs:
+3. Read canonical current docs before touching supporting docs. Treat these docs as current-state claims to verify, not as authority by themselves:
    - `README.md`
    - `README.*` when present
    - `docs/README.md`
@@ -21,7 +21,7 @@ Use this skill for developer-document governance: helping AI maintain the curren
    - `docs/invariants.md`
    - `docs/decisions.md`
    - `docs/active/current-state-vs-ideal-gap.md`
-4. Locate the ideal-state reference and single Active Truth plan, then identify the live repo surfaces that can prove or disprove their claims.
+4. Locate the ideal-state reference and single Active Truth plan, then identify the live repo surfaces that can prove or disprove their claims. The live surfaces, not the existing prose, decide the governed current truth.
 5. Inventory all `README*` and `docs/**/*.md` files before editing. The audit scope is not only the gap plan: every long-lived doc section must be checked for current role, current truth, and stale pollution risk.
 6. Optionally run the doctor as a preflight risk map:
 
@@ -88,7 +88,7 @@ Document governance must start from current repository reality, not from doctor 
 For every governed repo, perform a semantic audit before editing:
 
 1. Read the ideal-state reference and active truth owner.
-2. Read the code, contracts, tests, package/scripts, CLI/read-model surfaces, ledgers, and receipts that can prove or disprove the active plan's claims.
+2. Read the code, contracts, tests, package/scripts, CLI/read-model surfaces, ledgers, and receipts that can prove or disprove the active plan's and canonical docs' claims.
 3. Run repo-native read commands when the docs mention runtime, readiness, App/workbench, generated surfaces, owner receipt, typed blocker, artifact, memory, lifecycle, source, or production evidence.
 4. Compare each active-plan claim and each relevant canonical-doc statement against the live truth just read.
 5. Review every `README*` and `docs/**/*.md` section that can influence engineering decisions. Classify each section before editing: current truth, active gap, support reference, process history, retired/tombstone, or stale pollution.
@@ -180,7 +180,7 @@ For OPL-family repos, the active ideal-state gap plan is the usual output locati
 Rewrite algorithm:
 
 1. Anchor the ideal state from the user-maintained target-state reference; do not derive the ideal from current implementation.
-2. Read live repo truth for each target area: source, contracts, tests, CLI/read-model output, runtime ledgers, and canonical docs.
+2. Read live repo truth for each target area: source, contracts, tests, CLI/read-model output, and runtime ledgers; read canonical docs as claims that must be reconciled against those surfaces.
 3. Review the active truth plan, canonical docs, support docs, history/tombstone candidates, and stale/retired candidates section by section, comparing each substantive claim to live truth.
 4. Classify each existing active-plan item as `done`, `open`, `blocked`, `evidence_gap`, `retired`, or `stale_pollution`.
 5. Replace the active plan with the best current truth: progress table, current gaps, and the next-round agent prompt. Do not preserve stale rows for chronology.

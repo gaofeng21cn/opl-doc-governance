@@ -65,9 +65,9 @@ For OPL series, multi-repo cleanup, long-running autonomous work, or tasks that 
 
 ## How It Works
 
-- The agent reads the repository guidance, current docs, and live code or contract surfaces before editing.
+- The agent reads the repository guidance and current docs before editing, but treats existing prose as claims to verify against live code, contracts, tests, CLI/read-models, ledgers, and receipts.
 - The doctor gives a quick risk map without changing the target repository; it is not the governance input or task list.
-- The skill treats ideal-state references as the user's maintained intent and derives current progress, open gaps, and the next-round agent prompt from live code, contracts, tests, CLI/read-models, and docs.
+- The skill treats ideal-state references as the user's maintained intent and derives current progress, open gaps, and the next-round agent prompt from live repo truth; canonical docs are reconciled into that truth rather than trusted as proof by themselves.
 - The agent reviews substantive document claims against live repo truth before editing, then rewrites content, merges duplicate responsibilities, and routes stale material.
 - The agent audits the whole doc portfolio, not only the gap document: each long-lived document must retain one owner, one purpose, one state, and one machine boundary.
 - If a repo lacks a stable active owner, the agent can use `templates/active-truth-plan.md` as the shape for the single Active Truth plan.
